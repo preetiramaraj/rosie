@@ -46,7 +46,7 @@ sp {interpret-message*elaborate*interpret-which-concept-do-you-see*describe-list
 -->
     (<o> ^game-handle <game-handle>
          ^concept-seen <seen>
-         ^type <gtype>
+         ^gtype <gtype>
          ^asked-type <concept-type>
          ^concept-details <condet>
          ^concept-operators <con>)
@@ -78,7 +78,7 @@ sp {interpret-message*apply*interpret-which-concept-do-you-see*create*follow-up-
    (<o> ^name interpret-which-concept-do-you-see
         ^game-handle <game-handle>
         ^concept-seen <seen>
-        ^type <gtype>
+        ^gtype <gtype>
         ^asked-type <concept-type> # this might work for individual situation
         ^concept-details <condet>
         ^concept-operators <con>)
@@ -92,7 +92,7 @@ sp {interpret-message*apply*interpret-which-concept-do-you-see*create*follow-up-
         ^satisfaction <sat>)
    (<params> ^game-handle <game-handle>
              ^concept-seen <seen>
-             ^type <gtype>
+             ^gtype <gtype>
              ^concept-details <condet>
              ^concept-operators <con>)
    (<sat> ^dialog-event <de>)

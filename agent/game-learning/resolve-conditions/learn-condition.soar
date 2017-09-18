@@ -325,12 +325,32 @@ sp {resolve-conditions*elaborate*resolve-satisfaction-failure
 }
  
 sp {resolve-conditions*elaborate*resolve-satisfaction-failure*select-nlp
-   (state <s> #^name resolve-conditions
+   (state <s> ^name resolve-conditions
               ^superstate <ss>
               ^operator <o> +)
    (<o> ^name resolve-satisfaction-failure)
    (<ss> ^<gtype>.nlp-set <nlp-set>
          ^gtype { <> |predicate| <gtype> })
+   (<nlp-set> ^<< nlp conditions >> <condition>)
+   (<condition> #PR - TODO consider doing this with parameter instead of args
+                ^args <args1>
+                ^arg-count <argcount>)
+   -{(<nlp-set> ^nlp { <condition2> <> <condition1> })
+     (<condition2> ^arg-count { > <argcount> <argcount2> })}
+-->
+    (<o> ^nlp <condition>
+         ^gtype <gtype>)
+}
+
+sp {dialog-event*elaborate*resolve-satisfaction-failure*select-nlp
+   (state <s> ^name answer-can-you-see-game-concepts
+              ^superstate <ss>
+              ^operator <o> +)
+   (<o> ^name resolve-satisfaction-failure)
+   (<ss> ^<gtype>.nlp-set <nlp-set>
+         ^gtype { <> |predicate| <gtype> }
+         ^set <set>)
+   (<set> ^<gtype>)
    (<nlp-set> ^<< nlp conditions >> <condition>)
    (<condition> #PR - TODO consider doing this with parameter instead of args
                 ^args <args1>

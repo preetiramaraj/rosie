@@ -142,6 +142,7 @@ sp {dialog-event*state-no-change*descriptions-not-combined
 sp {dialog-event*propose*combine-object-descriptions
    (state <s> ^name dialog-event
               ^descriptions <descs>
+              ^purpose.type agent-perception-description # PR - TODO For now, since this turns up in if condition of mac (if a block is on a bank and a block is on a bank)
               ^generated yes)
    (<descs> ^description <desc1>
             ^description { <desc2> <> <desc1> })

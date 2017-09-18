@@ -42,7 +42,7 @@ sp {resolve-satisfaction-failure*apply*get-game-details*get-single-object-descri
    (<cond> ^name <name>
            ^args <args>
            ^parameter <param>
-           ^type << attribute concept >>) #here type is not really adding value, this should probably address condition. for e.g. block is not red and not i do not see a red block.
+           ^type << attribute concept >>) # PR - TODO this will fail if the concept is a C-ADJ-P (like larger) or a N (husband), incorporate the POS to make an informed condition
    #(<param> ^num 0)
 -->
    (<descs> ^description <desc>
@@ -111,7 +111,7 @@ sp {states*apply*get-game-details*retrieve-PP-predicate
            -^3)
    (<param> ^1 <first>
             -^2)
-   (<first> ^param-id <param-id>) # PR - you might have to consider the fact that this is a type single and not set, TODO handle it in soar
+   (<first> ^param-id <param-id>) # PR - TODO you might have to consider the fact that this is a type single and not set, TODO handle it in soar
 -->
    (<descs> ^obj-desc <obj-desc>
             ^description <desc>)
@@ -144,7 +144,7 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
            -^3) # PR - maybe remove -^3 and instead add a rule that adds a third value if it exists?
    (<param> ^1 <first>
             ^2 <second>)
-   (<first> ^param-id <param-id-1>) # PR - you might have to consider the fact that this is a type single and not set
+   (<first> ^param-id <param-id-1>) # PR - TODO you might have to consider the fact that this is a type single and not set
    (<second> ^param-id <param-id-2>)
 -->
    (<descs> ^description <desc>

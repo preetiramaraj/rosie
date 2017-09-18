@@ -332,10 +332,17 @@ public class AgentMessageParser
     	
     	if (conceptSeen.equals("Yes") && gtype.equals("action"))
     	{
-    		return "Yes. I see " + num_actions + " actions.";
+    		if(Integer.parseInt(num_actions) == 1)
+    		{
+    			return "Yes. I see " + num_actions + " action.";
+    		}
+    		else
+    		{
+    			return "Yes. I see " + num_actions + " actions.";
+    		}
     	}
     	// PR - add situation where you can detect a single action and respond about the same
-    	else if (conceptSeen.equals("No") && (gtype.equals("goal") || gtype.equals("failure"))) // PR - THis won't work with multiple actions, since there might be too many that don't match,  
+    	else if (conceptSeen.equals("No"))// && (gtype.equals("goal") || gtype.equals("failure"))) // PR - THis won't work with multiple actions, since there might be too many that don't match,  
     	{
     		String reason = translateUnsatisfiedCondition(responseId);
     		return conceptSeen + ". " + reason;
