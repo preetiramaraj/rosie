@@ -4,7 +4,7 @@ sp {dialog-event*propose*answer-what-is-game-component
    (state <s> ^name dialog-event
               ^purpose <p>
               -^set)
-   (<p> ^type << agent-goal-description agent-failure-description agent-game-action-description >>
+   (<p> ^type { << agent-goal-description agent-failure-description agent-game-action-description agent-game-concept-definition >> <ptype> }
         ^parameters <params>)
    (<params> ^type <value>
              ^game <game>)
@@ -12,7 +12,8 @@ sp {dialog-event*propose*answer-what-is-game-component
    (<s> ^operator <o> +)
    (<o> ^name answer-what-is-game-component
         ^type <value>
-        ^game <game>)
+        ^game <game>
+        ^purpose <ptype>)
 }
 
 ##########################################
@@ -25,13 +26,29 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*retr
               ^operator <o>)
    (<o> ^name answer-what-is-game-component
         ^type <value>
-        ^game <game>)
+        ^game <game>
+        ^purpose { <> agent-game-concept-definition <ptype> } )
 -->
    (<cmd> ^query <q> ^depth 15)
    (<q> ^type <value>
-        ^from <game>)        
+        ^from <game>)
 }
-    
+
+sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*retrieve-from-smem*get-learned-predicate
+   (state <s> ^name dialog-event
+              ^smem.command <cmd>
+              ^operator <o>)
+   (<o> ^name answer-what-is-game-component
+        ^type <value>
+        ^game <game>
+        ^purpose agent-game-concept-definition)
+-->
+   (<cmd> ^query <q> ^depth 15)
+   (<q> ^handle <value>
+        ^from <game>)
+   (<s> ^sentence <value>)      
+}
+  
 ## After retrieval
 sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem-retrieval*success
    (state <s> ^name dialog-event
@@ -39,14 +56,16 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem
               ^operator <o>)
    (<o> ^name answer-what-is-game-component
         ^type <value>
-        ^game <game>)
+        #^game <game>
+        )
    (<smem> ^result.retrieved <ret>
            ^command <cmd>)
    (<cmd> ^query <q>)
-   (<q> ^type <value>
-        ^from <game>)   
+   (<q> ^<< type handle >> <value>
+        #^from <game>
+        )   
    (<ret> ^from <game>
-          ^type <value>
+          ^<< type handle >> <value>
           ^predicate-structure <set>)
 -->
   (<s> ^set <set>
@@ -70,6 +89,7 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem
   (<s> ^verb-structure <verb-s>)
 }
 
+# PR - TODO this may not work for concepts
 ## if retrieval fails, look in chunks
 sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem-retrieval*failure
    (state <s> ^name dialog-event

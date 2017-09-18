@@ -44,6 +44,7 @@ sp {dialog-event*apply*answer-what-do-you-see*retrieve-PP-predicate
 ########################################################   
 sp {dialog-event*propose*complete-answer-what-do-you-see
    (state <s> ^name dialog-event
+              ^purpose.type agent-perception-description
               ^generated <gen>
               ^combined
               ^descriptions <descs>)

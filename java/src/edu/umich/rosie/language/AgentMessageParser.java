@@ -1583,7 +1583,7 @@ public class AgentMessageParser
 		//	description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
 		//}
 
-		if(attribute_value.equals("input-arg") || type.equals("concept")) // PR - except for husband/passenger, concepts tend to be adjectives
+		if(attribute_value.equals("input-arg") || type.equals("concept") || prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
 		{
 			description += "object ";
 		}

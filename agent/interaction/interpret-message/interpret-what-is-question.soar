@@ -287,13 +287,8 @@ sp {interpret-message*apply*interpret-what-is-question*create*retrieve-concept-d
    (<p> ^type agent-game-concept-definition
    		^parameters <params>
         ^satisfaction <sat>)
-   (<params> ^gtype <gtype>
-             ^<gtype> <val>
-             ^sentence <sentence>)
-   (<val> ^condition <cond>)
-   (<cond> ^name <sentence>
-   	   ^type concept
-   	   ^attribute predicate)
+   (<params> ^type <sentence>
+             ^game <game>)
    (<sat> ^dialog-event <de>)
    (<de> ^type explanation
          ^originator agent)
