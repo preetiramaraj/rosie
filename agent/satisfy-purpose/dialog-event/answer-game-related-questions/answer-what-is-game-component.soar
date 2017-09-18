@@ -46,9 +46,9 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*retr
    (<cmd> ^query <q> ^depth 15)
    (<q> ^handle <value>
         ^from <game>)
-   (<s> ^sentence <value>)      
+   (<s> ^sentence <value>)
 }
-  
+
 ## After retrieval
 sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem-retrieval*success
    (state <s> ^name dialog-event
@@ -63,7 +63,7 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem
    (<cmd> ^query <q>)
    (<q> ^<< type handle >> <value>
         #^from <game>
-        )   
+        )
    (<ret> ^from <game>
           ^<< type handle >> <value>
           ^predicate-structure <set>)
