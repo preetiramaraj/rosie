@@ -26,7 +26,7 @@ sp {states*apply*get-game-details*add-descriptions-to-state
         ^descriptions <descs>
         ^PR-game-details <val>)
 -->              
-   (<s> ^descriptions <descs>        
+   (<s> ^descriptions <descs>
         ^PR-game-details <val>)
 }
 
@@ -64,34 +64,6 @@ sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
         ^descriptions <descs>) 
 -->
    (<descs> ^sentence <sentence>)
-}
-
-# if there is only one argument, it is typically a property
-# one of the examples that requires this is the failure state of tictactoe (the count of the occupied linear location is 3)
-# the occupied linear location is also a condition on the top state. Use this as a way to distinguish from "all locations are covered"
-# because all locations are covered also is considered similarly
-sp {states*apply*get-game-details*retrieve-one-argument-predicates
-   (state <s> ^PR-game-details
-              ^descriptions <descs>
-              ^operator <o>
-              ^set <set>)
-   (<o> ^name get-game-details
-        ^descriptions <descs>)
-   (<set> ^conditions <cond>)
-   (<cond> ^name <name>
-           ^args <args>
-           ^parameter <param>
-   	   ^negative <neg>)
-   (<args> ^1 <obj1>
-           -^2
-           -^3)
-   (<param> ^1 <first>)
-   (<first> ^param-id <param-id>) # PR - it is not always the first param for eg: adjacent
--->
-   (<descs> ^obj-desc <obj-desc>)
-   (<obj-desc> ^1 <cond>
-               ^param-id <param-id>
-               ^negative <neg>)
 }
 
 # if only one param-id exists in a prepositional phrase, store it as one argument
@@ -307,6 +279,36 @@ sp {dialog-event*apply*get-game-details*retrieve-verbs
            ^2 <param-id2>)
 -->
    (<descs> ^verb <verb>)
+}
+
+# one of the examples that requires this is the failure state of tictactoe (the count of the occupied linear location is 3)
+# the occupied linear location is also a condition on the top state. Use this as a way to distinguish from "all locations are covered"
+# because all locations are covered also is considered similarly
+sp {states*apply*get-game-details*retrieve-one-argument-predicates-for-verb
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              ^verb-structure <verb-struct>
+              ^operator <o>
+              ^set <set>)
+   (<verb-struct> ^<arg-num> <verb>)
+   (<verb> ^<< 1 2 >> <param-id>)
+   (<o> ^name get-game-details
+        ^descriptions <descs>)
+   (<set> ^conditions <cond>)
+   (<cond> ^name <name>
+           ^args <args>
+           ^parameter <param>
+          ^negative <neg>)
+   (<args> ^1 <obj1>
+           -^2
+           -^3)
+   (<param> ^1 <first>)
+   (<first> ^param-id <param-id>) # PR - it is not always the first param for eg: adjacent
+-->
+   (<descs> ^obj-desc <obj-desc>)
+   (<obj-desc> ^1 <cond>
+               ^param-id <param-id>
+               ^negative <neg>)
 }
 
 ######################################
