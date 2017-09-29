@@ -123,6 +123,8 @@ public class AgentMessageParser
 			return translateGetAgentListDetectedGameConcepts(fieldsId);
 		} else if(type.equals("agent-list-mobile-world-concepts-seen")){
 			return translateGetAgentListDetectedMobileWorldConcepts(fieldsId);
+		} else if(type.equals("agent-list-subtasks")){
+			return translateGetAgentListSubTasks(fieldsId);
 		} else if(type.equals("agent-location-description")){
 			return translateLocationDescription(fieldsId);
 		} else if(type.equals("get-location-info")){
@@ -495,6 +497,34 @@ public class AgentMessageParser
     	}
     	
     	return detectedConceptsResponse;
+    }
+    
+    public static String translateGetAgentListSubTasks(Identifier fieldsId) {
+    	Identifier subtasksId = SoarUtil.getIdentifierOfAttribute(fieldsId, "subtasks");
+    	String task = SoarUtil.getValueOfAttribute(subtasksId, "task").replaceAll("\\d", "");
+    	String descriptions = "";
+    	// Iterating through subtasks of the task
+    	int i = 0;
+    	List<String> subtask_list = new ArrayList<String>();
+    	WMElement subtaskWME = subtasksId.FindByAttribute("handle", i);
+    	while(subtaskWME != null)
+    	{
+    		subtask_list.add(subtaskWME.GetValueAsString().replaceAll("\\d", ""));
+    		subtaskWME = subtasksId.FindByAttribute("handle", ++i);
+    	}
+    	// PR - TODO make the following into a helper function
+		if (subtask_list.size() > 1)
+		{
+			String subtask_desc = String.join(", ", subtask_list);
+			int lastcomma = subtask_desc.lastIndexOf(',');
+			subtask_desc = subtask_desc.substring(0, lastcomma) + " and" + subtask_desc.substring(lastcomma+1);
+			descriptions += "The subtasks of " + task + " are " + subtask_desc + ".";
+		}
+		else
+		{
+			descriptions += "The task " + task + " consists of the subtask " + subtask_list.get(0) + ".";
+		}
+		return descriptions;
     }
     
 	public static String translateGetAgentGameActionDescription(Identifier fieldsId) {

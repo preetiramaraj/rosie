@@ -56,3 +56,6 @@ source answer-which-concepts-do-you-see.soar
 # Source "answer-what-do-you-see.soar"
 source answer-what-do-you-see.soar
 
+# Source "answer-what-are-subtasks.soar"
+source answer-what-are-subtasks.soar
+

@@ -60,7 +60,7 @@ sp {interpret-message*elaborate*interpret-what-is-question*predicate-object
    (<arg1> ^item-type predicate
            ^2 <pred>)
    (<pred> ^2 <obj>
-           -^handle << goal failure action >>)
+           -^handle << goal failure action subtask >>)
 -->
    (<o> ^property <pred>
         ^object <obj>)
@@ -128,6 +128,24 @@ sp {interpret-message*elaborate*interpret-what-is-question*retrieve-concept-defi
         ^sentence <sentence>)
 }
 
+# Mobile world
+# Retrieving subtasks of tasks
+# PR - TODO what if task doesn't exist
+# PR - TODO get task name from question
+sp {interpret-message*elaborate*interpret-what-is-question*retrieve-subtask
+   (state <s> ^name interpret-message
+              ^operator <o> +)
+   (<o> ^name interpret-what-is-question
+        ^message.arg1 <arg1>)
+   (<arg1> ^item-type predicate
+           ^2 <pred>)
+   (<pred> ^2 <task-pred>
+           ^handle subtask)
+   (<task-pred> ^handle <task-handle>)
+-->
+   (<o> ^type subtask
+        ^task deliver1)
+}
 #####
 # OPERATOR APPLICATION
 #####
@@ -294,3 +312,48 @@ sp {interpret-message*apply*interpret-what-is-question*create*retrieve-concept-d
          ^originator agent)
 }
 
+sp {interpret-message*apply*interpret-what-is-question*retrieve-task-from-smem
+   (state <s> ^name interpret-message
+              ^smem.command <cmd>
+              ^instructor-message <msg>
+              ^operator <o>)
+   (<o> ^name interpret-what-is-question
+        ^type subtask
+        ^task <task-handle>) #fetch1
+-->
+   (<cmd> ^query <q>
+          ^depth 15)
+   (<q> ^handle <task-handle>)
+}
+
+# PR - TODO what if task doesn't exist
+sp {interpret-message*apply*interpret-what-is-question*create*retrieve-subtasks-of-task
+   (state <s> ^name interpret-message
+              ^smem <smem>
+              ^instructor-message <msg>
+              ^operator <o>)
+   (<smem> ^result.retrieved <ret>
+           ^command <cmd>)
+   (<cmd> ^query <q>)
+   (<q> ^handle <task-handle>)
+   (<ret> ^handle <task-handle>
+          ^procedural <proc>)
+   (<proc> ^subactions <sub-actions>)
+   (<o> ^name interpret-what-is-question
+        ^type subtask
+        ^task <task-handle>) #fetch1
+-->
+   (<s> ^new-segment-info <info>
+        ^mark-interpreted <msg>)
+   (<info> ^purpose <p>
+           ^originator instructor)
+   (<p> ^type agent-list-subtasks
+        ^parameters <params>
+        ^satisfaction <sat>)
+   (<params> ^type subtask
+             ^task <task-handle>
+             ^subactions <sub-actions>)
+   (<sat> ^dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}

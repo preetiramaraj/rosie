@@ -1,0 +1,86 @@
+# PR - TODO what if task does not exist, it will always have subtasks right?
+sp {dialog-event*propose*answer-what-are-subtasks
+   (state <s> ^name dialog-event
+              ^purpose <p>)
+   (<p> ^type agent-list-subtasks
+        ^parameters <params>)
+   (<params> ^type subtask
+             ^task <task-handle>
+             ^subactions <sub-actions>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name answer-what-are-subtasks
+        ^type subtask
+        ^task <task-handle>
+        ^subactions <sub-actions>)
+}
+
+##########################################
+# Apply operator answer-what-are-subtasks
+##########################################
+
+sp {dialog-event*apply*answer-what-are-subtasks*add-response-to-state
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^purpose <p>)
+   (<o> ^name answer-what-are-subtasks
+        ^type subtask
+        ^task <task-handle>
+        ^subactions <sub-actions>)
+-->
+   (<s> ^subtasks <subtasks>)
+   (<subtasks> ^task <task-handle>)
+}
+
+sp {dialog-event*apply*answer-what-are-subtasks*add-handle-to-subtasks
+   (state <s> ^name dialog-event 
+              ^subtasks <subtasks>
+              ^operator <o>
+              ^purpose <p>)
+   (<o> ^name answer-what-are-subtasks
+        ^type subtask
+        ^task <task-handle>
+        ^subactions <sub-actions>)
+   (<sub-actions> ^subaction <subaction>)
+   (<subaction> ^action-handle <handle>)
+-->
+   (<subtasks> ^handle <handle>)
+}
+
+################################################################
+# Report answer using complete-answer-what-are-subtasks
+################################################################
+sp {dialog-event*propose*complete-answer-what-are-subtasks
+   (state <s> ^name dialog-event
+              ^subtasks <subtasks>
+              ^purpose.type agent-list-subtasks)
+   (<subtasks> ^handle <handle>)
+   -{ (<subtasks> ^handle { > <handle> <handle2> }) }
+-->
+   (<s> ^operator <o> + >)
+   (<o> ^name complete-answer-what-are-subtasks)
+}
+
+sp {dialog-event*apply*complete-answer-what-are-subtasks*send-message
+   (state <s> ^name dialog-event
+              ^purpose.type <type>
+              ^io.output-link <out>
+              ^operator <o>
+              ^subtasks <subtasks>)
+   (<o> ^name complete-answer-what-are-subtasks)
+-->
+   (<out> ^send-message <msg>)
+   (<msg> ^type <type>
+          ^fields.subtasks <subtasks>)
+}
+
+sp {dialog-event*apply*complete-answer-what-are-subtasks*mark*performed
+   (state <s> ^name dialog-event
+              ^operator.name complete-answer-what-are-subtasks
+              ^io.output-link.send-message <msg>
+              ^top-state.interaction.status <status>)
+-->
+   (<status> ^performed.dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}   
