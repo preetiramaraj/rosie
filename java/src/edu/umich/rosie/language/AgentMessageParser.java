@@ -125,6 +125,8 @@ public class AgentMessageParser
 			return translateGetAgentListDetectedMobileWorldConcepts(fieldsId);
 		} else if(type.equals("agent-list-subtasks")){
 			return translateGetAgentListSubTasks(fieldsId);
+		} else if(type.equals("agent-can-you-do-response")){
+			return translateGetAgentCanYouDoResponse(fieldsId);
 		} else if(type.equals("agent-location-description")){
 			return translateLocationDescription(fieldsId);
 		} else if(type.equals("get-location-info")){
@@ -525,6 +527,12 @@ public class AgentMessageParser
 			descriptions += "The task " + task + " consists of the subtask " + subtask_list.get(0) + ".";
 		}
 		return descriptions;
+    }
+    
+    public static String translateGetAgentCanYouDoResponse(Identifier fieldsId) {
+    	Identifier responseId = SoarUtil.getIdentifierOfAttribute(fieldsId, "response");
+    	String canRequestResponse = SoarUtil.getValueOfAttribute(responseId, "action-possible");
+    	return canRequestResponse;
     }
     
 	public static String translateGetAgentGameActionDescription(Identifier fieldsId) {

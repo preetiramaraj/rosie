@@ -1,0 +1,130 @@
+sp {dialog-event*propose*answer-can-request
+   (state <s> ^name dialog-event
+              ^purpose <p>)   
+   (<p> ^type agent-can-you-do-response
+           ^parameters <params>
+        ^satisfaction <sat>)
+   (<params> ^action-handle <handle>
+             ^object <obj>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name answer-can-request
+        ^action-handle <handle>
+        ^object <obj>)
+}
+
+sp {dialog-event*apply*answer-can-request
+   (state <s> ^name dialog-event
+              ^top-state.world <w>
+              ^operator <o>)
+   (<o> ^name answer-can-request
+        ^action-handle <handle>
+        ^object <obj>)
+-->
+   (<s> ^agent-conversation true
+        ^default-problem-space no
+        ^problem-space <ps>)
+   (<ps> ^propose-action-operators true
+         ^name action
+         ^execution-type internal
+         ^world <world>)
+   (<world> ^copy-type deep
+            ^source <w>)
+}
+
+#sp {prefer*answer-can-request*over*action
+#   (state <s> ^name dialog-event
+#              ^operator <o1> +
+#              ^operator <o2> +)
+#   (<o2> ^action-handle <handle>)
+#   (<o1> ^name answer-can-request)
+#-->
+#   (<s> ^operator <o1> > <o2>)
+#}
+
+sp {operator*impasse-tie*propose*identify-if-action-possible
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^impasse tie)
+   (<ss> ^name dialog-event
+         ^operator <o1> +
+         ^operator <o2> +)   
+   (<o1> ^action-handle <handle>
+         ^arg1.id <obj>)
+   (<o2> ^name answer-can-request
+        ^action-handle <handle1>
+        ^object <obj2>)
+   -{(<s> ^item { > <o1> <o3> } ) }
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name identify-if-action-possible)
+}
+
+sp {operator*impasse-tie*apply*identify-if-action-possible
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^operator <o>
+              ^impasse tie)
+   (<o> ^name identify-if-action-possible)
+   (<ss> ^name dialog-event
+         ^operator <o1> +
+         ^operator <o2> +)
+   (<o1> ^action-handle <handle>
+         ^arg1.id <obj>)
+   (<o2> ^name answer-can-request
+        ^action-handle <handle>
+        ^object <obj2>)
+   (<obj> ^handle <obj-handle>)
+   (<obj2> ^handle <obj-handle>)
+-->
+   (<ss> ^action-possible yes)
+}
+
+sp {operator*impasse-tie*apply*identify-if-action-possible*not-identified
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^impasse no-change)
+   (<ss> ^operator.name identify-if-action-possible
+         ^superstate <sss>)
+   (<sss> ^name dialog-event)
+-->
+   (<sss> ^action-possible no)
+}
+
+########################################################
+# propose complete-answer-can-request
+########################################################
+
+sp {dialog-event*propose*complete-answer-can-request
+   (<s> ^name dialog-event
+         ^purpose.type agent-can-you-do-response
+        ^action-possible <possible>)
+-->
+   (<s> ^operator <o> + >)
+   (<o> ^name complete-answer-can-request)
+}   
+   
+sp {dialog-event*apply*complete-answer-can-request*send-message
+   (state <s> ^name dialog-event
+              ^purpose.type <type>
+              ^io.output-link <out>
+              ^operator <o>
+              ^action-possible <possible>)
+   (<o> ^name complete-answer-can-request)
+-->
+   (<out> ^send-message <msg>)
+   (<msg> ^type <type>
+          ^fields.response <response>)
+   (<response> ^action-possible <possible>)
+}
+
+sp {dialog-event*apply*complete-answer-can-request*mark*performed
+   (state <s> ^name dialog-event
+              ^operator.name complete-answer-can-request
+              ^io.output-link.send-message <msg>
+              ^top-state.interaction.status <status>)
+-->
+   (<status> ^performed.dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}   

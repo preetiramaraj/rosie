@@ -1,0 +1,64 @@
+###################################################################
+#
+# interpret-can-request
+#   Occurs when the instructor wishes to know whether the agent can do a given action
+#   Construction: *-can-you-VP-?
+#       E.g. 'Can you pick up the red box?'
+#
+###################################################################
+
+sp {interpret-message*propose*interpret-can-request
+   (state <s> ^name interpret-message
+              ^instructor-message <msg>)
+   (<msg> ^message-type can-request
+         -^interpreted true)
+-->
+   (interrupt)
+   (<s> ^operator <o> +)
+   (<o> ^name interpret-can-request
+        ^message <msg>)
+}
+
+######
+# OPERATOR ELABORATIONS
+######
+
+# Elaborate useful information from the message onto the operator
+sp {interpret-message*elaborate*interpret-can-request*get-details-of-action-from-message
+   (state <s> ^name interpret-message
+              ^operator <o> +)
+   (<o> ^name interpret-can-request
+        ^message <msg>)
+   (<msg> ^action <action>
+          ^arg1 <arg1>)
+   (<action> ^handle <handle>)
+-->
+   (<o> ^action-handle <handle>
+        ^object <arg1>)
+}
+
+#####
+# OPERATOR APPLICATION
+#####
+
+sp {interpret-message*apply*interpret-can-request
+   (state <s> ^name interpret-message
+              ^operator <o>)
+   (<o> ^name interpret-can-request
+        ^message <msg>
+        ^action-handle <handle>
+        ^object <arg1>)
+-->
+   (<s> ^new-segment-info <info>
+        ^mark-interpreted <msg>)
+   (<info> ^purpose <p>
+           ^originator instructor)
+   (<p> ^type agent-can-you-do-response
+           ^parameters <params>
+        ^satisfaction <sat>)
+   (<params> ^action-handle <handle>
+             ^object <arg1>)
+   (<sat> ^dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}
