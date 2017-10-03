@@ -26,45 +26,40 @@ sp {dialog-event*apply*answer-can-request
         ^problem-space <ps>)
    (<ps> ^propose-action-operators true
          ^name action
-         ^execution-type internal
          ^world <world>)
    (<world> ^copy-type deep
             ^source <w>)
 }
 
-#sp {prefer*answer-can-request*over*action
-#   (state <s> ^name dialog-event
-#              ^operator <o1> +
-#              ^operator <o2> +)
-#   (<o2> ^action-handle <handle>)
-#   (<o1> ^name answer-can-request)
-#-->
-#   (<s> ^operator <o1> > <o2>)
-#}
+sp {prefer*answer-can-request*over*action
+   (state <s> ^name dialog-event
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o2> ^action-handle <handle>)
+   (<o1> ^name answer-can-request)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
 
-sp {operator*impasse-tie*propose*identify-if-action-possible
+sp {operator*impasse*no-change*propose*identify-if-action-possible
    (state <s> ^superstate <ss>
               ^attribute operator
-              ^impasse tie)
+              ^impasse no-change)
    (<ss> ^name dialog-event
-         ^operator <o1> +
-         ^operator <o2> +)   
-   (<o1> ^action-handle <handle>
-         ^arg1.id <obj>)
+         ^operator <o2> +)
    (<o2> ^name answer-can-request
         ^action-handle <handle1>
         ^object <obj2>)
-   -{(<s> ^item { > <o1> <o3> } ) }
 -->
    (<s> ^operator <o> +)
    (<o> ^name identify-if-action-possible)
 }
 
-sp {operator*impasse-tie*apply*identify-if-action-possible
+sp {operator*impasse*no-change*apply*identify-if-action-possible
    (state <s> ^superstate <ss>
               ^attribute operator
               ^operator <o>
-              ^impasse tie)
+              ^impasse no-change)
    (<o> ^name identify-if-action-possible)
    (<ss> ^name dialog-event
          ^operator <o1> +
@@ -77,10 +72,11 @@ sp {operator*impasse-tie*apply*identify-if-action-possible
    (<obj> ^handle <obj-handle>)
    (<obj2> ^handle <obj-handle>)
 -->
-   (<ss> ^action-possible yes)
+   (<ss> ^action-possible Yes)
 }
 
-sp {operator*impasse-tie*apply*identify-if-action-possible*not-identified
+# When no actions are proposed or this action is not identified
+sp {operator*impasse*no-change*apply*identify-if-action-possible*not-identified
    (state <s> ^superstate <ss>
               ^attribute operator
               ^impasse no-change)
@@ -88,7 +84,7 @@ sp {operator*impasse-tie*apply*identify-if-action-possible*not-identified
          ^superstate <sss>)
    (<sss> ^name dialog-event)
 -->
-   (<sss> ^action-possible no)
+   (<sss> ^action-possible No)
 }
 
 ########################################################
