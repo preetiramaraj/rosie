@@ -44,46 +44,53 @@ sp {dialog-event*apply*answer-which-concepts-do-you-see*mobile-world
         ^type action)
 -->
    (<s> ^problem-space <ps>
+        ^default-problem-space no
         ^response <res>)
    (<ps> ^propose-action-operators true
          ^name action
-         ^execution-type internal
          ^world <world>)
    (<world> ^copy-type deep
             ^source <w>)
 }
 
+# PR - TODO this can conflict with game actions when you ask "Which actions of game do you see". Handle accordingly.
+sp {prefer*answer-which-concepts-do-you-see*over*action
+   (state <s> ^name dialog-event
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o2> ^action-handle <handle>)
+   (<o1> ^name answer-which-concepts-do-you-see)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
 
 #######################################
 # Propose-concept-identified
 #######################################
 # PR - this looks like it might only work for actions unless we decide to say which tasks do you see?
-sp {operator*impasse-tie*propose*mobile-world-concept-identified
+sp {operator*impasse*no-change*propose*mobile-world-concept-identified
    (state <s> ^superstate <ss>
               ^attribute operator
-              ^impasse tie)
+              ^impasse no-change)
    (<ss> ^name dialog-event
-         ^operator <o1> +
-         ^operator <o2> +)   
-   (<o1> ^action-handle <handle>
-         ^arg1.id <obj>)
+         ^operator <o2> +)
    (<o2> ^name answer-which-concepts-do-you-see
          ^type action)
-   -{ (<s> ^item { > <o1> <> <o2> <o3> }) }
 -->
-   (<s> ^operator <o> + >)
+   (<s> ^operator <o> +)
    (<o> ^name mobile-world-concept-identified
         ^concept-operators <con>
         ^concept-type action)
+   (<ss> ^concept-operators <con>)
 }
 
-sp {operator*impasse-tie*elaborate*mobile-world-concept-identified
+sp {operator*impasse*no-change*elaborate*mobile-world-concept-identified
    (state <s> ^superstate <ss>
               ^attribute operator
-              ^impasse tie 
+              ^impasse no-change
               ^operator <o> +)
    (<ss> ^name dialog-event
-         ^operator <o1> +)   
+         ^operator <o1> +)
    (<o> ^name mobile-world-concept-identified
         ^concept-operators <con>)
    (<o1> ^action-handle <handle>
@@ -94,10 +101,10 @@ sp {operator*impasse-tie*elaborate*mobile-world-concept-identified
          ^object <obj>)
 }
 
-sp {operator*impasse-tie*apply*mobile-world-concept-identified*actions-detected
+sp {operator*impasse*no-change*apply*mobile-world-concept-identified*actions-detected
    (state <s> ^superstate <ss>
               ^attribute operator
-              ^impasse tie
+              ^impasse no-change
               ^operator <o>)
    (<o> ^name mobile-world-concept-identified
         ^concept-operators <con>
@@ -115,6 +122,20 @@ sp {operator*impasse-tie*apply*mobile-world-concept-identified*actions-detected
           ^concept-type <type>)
 }
 
+sp {operator*impasse*no-change*apply*mobile-world-concept-identified*not-identified
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^impasse no-change)
+   (<ss> ^operator <o>
+         ^superstate <sss>)
+   (<o> ^name mobile-world-concept-identified
+        ^concept-type <type>)
+   (<sss> ^name dialog-event
+          ^response <res>)
+-->
+   (<res> ^concept-seen No
+          ^concept-type <type>)
+}
 ########################################
 # The following is based on being able to talk about real objects (talking about place a missionary as opposed to place a block the way we do with mobile world)
 #############################################
@@ -205,7 +226,6 @@ sp {dialog-event*apply*answer-which-concepts-do-you-see*create-message
            ^num-operators <num>)
 }
 
-
 ################################################################
 # Report answer using complete-answer-which-concepts-do-you-see
 ################################################################
@@ -213,10 +233,8 @@ sp {dialog-event*apply*answer-which-concepts-do-you-see*create-message
 sp {dialog-event*propose*complete-answer-which-concepts-do-you-see
    (state <s> ^name dialog-event
               ^response <res>
-              ^purpose.type <type>)
-   (<res> ^concept-seen <seen>
-          ^concept-details <con>
-          ^concept-type <ctype>)
+              ^purpose.type << agent-response-list-concepts-seen agent-list-mobile-world-concepts-seen >>)
+   (<res> ^concept-seen <seen>)
 -->
    (<s> ^operator <o> + >)
    (<o> ^name complete-answer-which-concepts-do-you-see
