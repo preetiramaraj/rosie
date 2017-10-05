@@ -92,7 +92,7 @@ sp {operator*impasse*no-change*apply*identify-if-action-possible*not-identified
 ########################################################
 
 sp {dialog-event*propose*complete-answer-can-request
-   (<s> ^name dialog-event
+   (state <s> ^name dialog-event
          ^purpose.type agent-can-you-do-response
         ^action-possible <possible>)
 -->
