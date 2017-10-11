@@ -629,7 +629,7 @@ public class AgentMessageParser
 				//{
 				//	conceptDefinition = conceptDefinition.substring(0, conceptDefinition.length() - 5);
 				//}
-				if(SoarUtil.getValueOfAttribute(descSetId, "pronoun") != null)
+				if((SoarUtil.getValueOfAttribute(descSetId, "pronoun")).equals("it"))
 				{
 					conceptDefinition += ", then it is " + conceptName + ".";
 				}

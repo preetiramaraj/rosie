@@ -322,8 +322,7 @@ sp {states*op-no-change*propose*add-generated-attribute
               ^impasse no-change)
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
          ^descriptions <descs>
-         #^PR-game-details
-         )
+         ^operator.name get-game-details)
 -->
    (<s> ^operator <o> +)
    (<o> ^name add-generated-attribute)
@@ -336,9 +335,7 @@ sp {states*op-no-change*apply*add-generated-attribute*no
               ^impasse no-change
               ^operator.name add-generated-attribute)
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
-         ^descriptions <descs>
-         #^PR-game-details
-         )
+         ^descriptions <descs>)
    (<descs> -^description
             -^obj-desc
             -^verb)
@@ -352,9 +349,7 @@ sp {states*op-no-change*apply*add-generated-attribute*yes
               ^impasse no-change
               ^operator.name add-generated-attribute)
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
-         ^descriptions <descs>
-         #^PR-game-details
-         )
+         ^descriptions <descs>)
    (<descs> ^<< description obj-desc verb >> <desc>)
    -{ (<descs> ^<< description obj-desc verb >> {> <desc> <desc2>})}
 -->
@@ -375,7 +370,7 @@ sp {dialog-event*propose*complete-answer-get-game-details
               #^status complete # adding to check smem referent
               ^descriptions <descs>)
 -->
-   (<s> ^operator <o> + <)
+   (<s> ^operator <o> +)
    (<o> ^name complete-answer-get-game-details
         ^descriptions <descs>
         ^generated <gen>)   

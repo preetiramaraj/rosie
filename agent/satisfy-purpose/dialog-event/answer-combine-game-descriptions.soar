@@ -129,6 +129,8 @@ sp {dialog-event*state-no-change*descriptions-not-combined
          ^descriptions <descs>
          ^added yes
          ^generated <gen>)
+   -{(<ss> ^purpose.type agent-game-concept-definition)
+     (<descs> -^pronoun <pro>)}
 -->
    (<ss> ^combined no)
 }    
