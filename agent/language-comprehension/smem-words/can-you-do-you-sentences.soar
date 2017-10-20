@@ -156,3 +156,35 @@ smem --add {
                   ^required true
                   ^syntactic-structure terminator)
 }
+
+# Describe how you would deliver a red box to the kitchen.
+smem --add {
+			(<sentence> ^construction |*-describe-how-you-would-VP|    
+			            ^current-word |how|
+			              ^prior-word |describe|
+			             ^prior-word-first true
+			               ^assigners <isa> <isb> <isc> <isd>
+			             ^message-type describe-hypo-actions
+			             ^structure-type S)
+			           (<isa> ^structure-type DP
+			                    ^syntactic-structure complement2
+			                  ^semantic-structure actor
+			                  ^referent-type literal
+			                  ^required true)
+			           (<isb> ^structure-type V-AUX
+			                  ^after <isa>
+			                  ^required true
+			                  ^referent-type literal
+			                  ^syntactic-structure nil
+			                  ^semantic-structure modifier)
+			           (<isc> ^structure-type VP
+			                  ^after <isb>
+			                  ^syntactic-structure predicate
+			                  ^semantic-structure *embed*
+			                  ^embed-structure action-subclause
+			                  ^required true)    
+			           (<isd> ^structure-type T
+			                  ^after <isc>
+			                  ^required true
+			                  ^syntactic-structure terminator)           
+}
