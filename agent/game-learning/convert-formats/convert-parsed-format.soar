@@ -224,10 +224,20 @@ sp {convert-parsed-format*elaborate*arg1*parameter
    (<s> ^parameter <p>)
 }
 
+#stranger version
 sp {convert-parsed-format*elaborate*arg1*relation*parameterfg
    (state <s> ^name convert-parsed-format
               ^clause <c>)
    (<c> ^arg1 <p> ^arg1.handle number1)
+   (<p> ^relation <type>)
+-->
+   (<s> ^numeric-predicate <p>)
+}
+
+sp {convert-parsed-format*elaborate*arg1*relation*parameter*write1
+   (state <s> ^name convert-parsed-format
+              ^clause <c>)
+   (<c> ^arg1 <p> ^action.handle write1)
    (<p> ^relation <type>)
 -->
    (<s> ^numeric-predicate <p>)
@@ -396,6 +406,14 @@ sp {convert-parsed-format*elaborate*arg2*parameter*indef
               ^clause <c>)
    (<c> ^predicate.{2} <p>)
    (<p> ^predicates.category <type> -^predicates.number)
+  -{(<s> ^pref-action.<< 1 2 >> <cz8>)
+     (<cz8> ^<< arg1 arg2 >> <p>)}
+  -{(<s> ^pref-action.<< 1 2 >> <cz9>)
+     (<cz9> ^arg2.{2} <p>)}
+  -{(<s> ^pref-action <cx8>)
+     (<cx8> ^<< arg1 arg2 >> <p>)}
+  -{(<s> ^pref-action <cx9>)
+     (<cx9> ^arg2.{2} <p>)}
    -{(<s> ^clause <c2>)
      (<c2> ^<< arg1 arg2 >> <p>)}
   -{(<s> ^parameter <pp>)
@@ -417,6 +435,7 @@ sp {convert-parsed-format*elaborate*arg2*parameter*indef
 -->
    (<s> ^indef <p>)
 }
+
 sp {convert-parsed-format*elaborate*arg2*parameter*indef2
    (state <s> ^name convert-parsed-format
               -^<< input-object-1 input-object-2 output-object-1 >> <p>
@@ -424,6 +443,16 @@ sp {convert-parsed-format*elaborate*arg2*parameter*indef2
    (<c> ^relation <rel1>)
    (<rel1> ^2 <p>)
    (<p> ^predicates.category <type> -^predicates.number)
+   -{(<s> ^pref-action <cx8>)
+     (<cx8> ^<< arg1 arg2 >> <p>)}
+  -{(<s> ^pref-action <cx9>)
+     (<cx9> ^arg2.{2} <p>)}
+  -{(<s> ^pref-action.<< 1 2 >> <cz8>)
+     (<cz8> ^<< arg1 arg2 >> <p>)}
+  -{(<s> ^pref-action.<< 1 2 >> <cz9>)
+     (<cz9> ^arg2.{2} <p>)}
+   -{(<s> ^clause <c2>)
+     (<c2> ^<< arg1 arg2 >> <p>)}
    -{(<s> ^clause <c2>)
      (<c2> ^<< arg1 arg2 >> <p>)}
   -{(<s> ^parameter {<por> <> <c>})
@@ -434,6 +463,8 @@ sp {convert-parsed-format*elaborate*arg2*parameter*indef2
     (<r> ^3 <p>)}
   -{(<p> ^relation <rr>)
     (<rr> ^2)}
+  -{(<s> ^predicate {<pp3> <> <c>})
+    (<pp3> ^{2}.{2} <p>)}
   -{(<s> ^clause {<c3> <> <c>})
     (<c3> ^predicate.{2} <p>)}
    -{(<s> ^clause {<c3> <> <c>})
@@ -473,6 +504,7 @@ sp {convert-parsed-format*apply*create-object*increment-object-count
 
 sp {convert-parsed-format*propose*handle-action
    (state <s> ^name convert-parsed-format
+             -^clause.if-subclause <c> #then action used as predicate
               ^clause <c>)
    (<c> ^action <a> ^arg1 <a1> ^arg2 <a2>)
    (<a> -^formatted)
@@ -488,6 +520,26 @@ sp {convert-parsed-format*propose*handle-action
         ^arg1 <a1>
         ^arg2 <a2>)
 }
+sp {convert-parsed-format*propose*handle-action-predicate
+   (state <s> ^name convert-parsed-format
+              ^clause.if-subclause <c> #then action used as predicate
+              ^clause <c>)
+   (<c> ^action <a> ^arg1 <a1> ^arg2 <a2>)
+   (<a> -^formatted)
+  -{(<c> ^arg1 {<a3> <> <a1>})}
+-{(<s> ^clause.action {<a4> <> <a>})
+  (<a4> -^handle is1)}
+-->
+#(interrupt)
+#(write (cmd print <c> -d 10))
+   (<s> ^operator <o> + =)
+   (<o> ^name handle-action-predicate
+        ^action <a>
+        ^arg1 <a1>
+        ^arg2 <a2>)
+}
+
+
 
 sp {convert-parsed-format*propose*handle-pref-action2
    (state <s> ^name convert-parsed-format
@@ -538,6 +590,17 @@ sp {convert-parsed-format*propose*handle-pref-action
         ^arg2 <a2>)
 }
 
+#sp {convert-parsed-format*apply*handle-pref-action*interrupt
+#   (state <s> ^name convert-parsed-format
+#   		  ^operator <op>
+#              ^pref-action <c>)
+#(<op> ^name handle-pref-action)
+#-->
+#(interrupt)
+#(write (cmd print <op> -d 10))
+#}
+
+
 sp {convert-parsed-format*propose*handle-pref-action*avoid
    (state <s> ^name convert-parsed-format
               ^pref-action <c>)
@@ -578,6 +641,26 @@ sp {convert-parsed-format*propose*handle-pref-action*arg1
         ^arg1 <a1>)
 }
 
+sp {convert-parsed-format*apply*handle-action-predicate
+   (state <s> ^name convert-parsed-format
+              ^operator <o>)
+   (<o> ^name handle-action-predicate ^action <c> ^arg1 <a1> ^arg2 <a2>)
+   (<c> ^handle <name>)
+   (<a1> ^formatted <p> ^parameter-index <id>)
+   (<a2> ^handle <prep> ^item-type predicate ^2 <a22>)
+   (<a22> ^formatted <p2> ^parameter-index <id2>)
+   (<p> ^rtype <rtype>)
+   (<p2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted true)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute action ^rtype <rtype> ^verb <prep>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <id> ^type <rtype>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+
+#qqqqqqqq
 sp {convert-parsed-format*apply*handle-pref-action
    (state <s> ^name convert-parsed-format
               -^modifier previously
@@ -695,6 +778,7 @@ sp {convert-parsed-format*elaborate*numeric-action
 -->
    (<n> ^return-type number)
 }
+
 sp {convert-parsed-format*apply*handle-pref-action2
    (state <s> ^name convert-parsed-format
               ^operator <o>)
@@ -710,9 +794,9 @@ sp {convert-parsed-format*apply*handle-pref-action2
    (<a1> ^formatted <p> ^parameter-index <id>)
    (<a3> ^formatted <p3> ^parameter-index <id3>)
    (<a2> ^handle <prep> ^item-type predicate ^2 <a22>)
-   (<a22> ^formatted <p2> ^parameter-index <id2>)
+   (<a22> ^formatted <p2> -^new-formatted ^parameter-index <id2>)
    (<a4> ^handle <prep2> ^item-type predicate ^2 <a44>)
-   (<a44> ^formatted <p4> ^parameter-index <id4>)
+   (<a44> ^formatted <p4> -^new-formatted ^parameter-index <id4>)
    (<p> ^rtype <rtype>)
    (<p2> ^rtype <rtype2>)
    (<p3> ^rtype <rtype3>)
@@ -730,6 +814,115 @@ sp {convert-parsed-format*apply*handle-pref-action2
    (<para3> ^param-id <id3> ^type <rtype3>)
    (<para4> ^param-id <id4> ^type <rtype4>)
 }
+
+sp {convert-parsed-format*apply*handle-pref-action2*new4
+   (state <s> ^name convert-parsed-format
+              ^operator <o>)
+   (<o> ^name handle-pref-action ^action <c>
+        ^action2 <c2> #so far the same?
+        ^prefer 2
+        ^arg1 <a1>
+        ^arg2 <a2>
+        ^arg1b <a3>
+        ^arg2b <a4>)
+   (<c> ^handle <name>)
+   (<c2> ^handle <name2>)
+   (<a1> ^formatted <p> ^parameter-index <id>)
+   (<a3> ^formatted <p3> ^parameter-index <id3>)
+   (<a2> ^handle <prep> ^item-type predicate ^2 <a22>)
+   (<a22> ^formatted <p2> -^new-formatted ^parameter-index <id2>)
+   (<a4> ^handle <prep2> ^item-type predicate ^2 <a44>)
+   (<a44> ^new-formatted <p4> ^parameter-index <id4>)
+   (<p> ^rtype <rtype>)
+   (<p2> ^rtype <rtype2>)
+   (<p3> ^rtype <rtype3>)
+   (<p4> ^rtype <rtype4>)
+-->
+   (<c> ^formatted true)
+   (<s> ^prefer <n12> ^nlp <n> <n2>)
+   (<n12> ^1 <n> ^2 <n2>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute action ^rtype <rtype> ^verb <prep>)
+   (<n2> ^name <name2> ^args <ab> ^parameter <parab> ^type concept ^attribute action ^rtype <rtype3> ^verb <prep2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <id> ^type <rtype>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+   (<parab> ^1 <para3> ^2 <para4>)
+   (<para3> ^param-id <id3> ^type <rtype3>)
+   (<para4> ^param-id <id4> ^type <rtype4>)
+}
+
+
+sp {convert-parsed-format*apply*handle-pref-action2*new
+   (state <s> ^name convert-parsed-format
+              ^operator <o>)
+   (<o> ^name handle-pref-action ^action <c>
+        ^action2 <c2> #so far the same?
+        ^prefer 2
+        ^arg1 <a1>
+        ^arg2 <a2>
+        ^arg1b <a3>
+        ^arg2b <a4>)
+   (<c> ^handle <name>)
+   (<c2> ^handle <name2>)
+   (<a1> ^formatted <p> ^parameter-index <id>)
+   (<a3> ^formatted <p3> ^parameter-index <id3>)
+   (<a2> ^handle <prep> ^item-type predicate ^2 <a22>)
+   (<a22> ^new-formatted <p2> ^parameter-index <id2>)
+   (<a4> ^handle <prep2> ^item-type predicate ^2 <a44>)
+   (<a44> ^formatted <p4> -^new-formatted ^parameter-index <id4>)
+   (<p> ^rtype <rtype>)
+   (<p2> ^rtype <rtype2>)
+   (<p3> ^rtype <rtype3>)
+   (<p4> ^rtype <rtype4>)
+-->
+   (<c> ^formatted true)
+   (<s> ^prefer <n12> ^nlp <n> <n2>)
+   (<n12> ^1 <n> ^2 <n2>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute action ^rtype <rtype> ^verb <prep>)
+   (<n2> ^name <name2> ^args <ab> ^parameter <parab> ^type concept ^attribute action ^rtype <rtype3> ^verb <prep2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <id> ^type <rtype>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+   (<parab> ^1 <para3> ^2 <para4>)
+   (<para3> ^param-id <id3> ^type <rtype3>)
+   (<para4> ^param-id <id4> ^type <rtype4>)
+}
+sp {convert-parsed-format*apply*handle-pref-action2*new2
+   (state <s> ^name convert-parsed-format
+              ^operator <o>)
+   (<o> ^name handle-pref-action ^action <c>
+        ^action2 <c2> #so far the same?
+        ^prefer 2
+        ^arg1 <a1>
+        ^arg2 <a2>
+        ^arg1b <a3>
+        ^arg2b <a4>)
+   (<c> ^handle <name>)
+   (<c2> ^handle <name2>)
+   (<a1> ^formatted <p> ^parameter-index <id>)
+   (<a3> ^formatted <p3> ^parameter-index <id3>)
+   (<a2> ^handle <prep> ^item-type predicate ^2 <a22>)
+   (<a22> ^new-formatted <p2> ^parameter-index <id2>)
+   (<a4> ^handle <prep2> ^item-type predicate ^2 <a44>)
+   (<a44> ^new-formatted <p4> ^parameter-index <id4>)
+   (<p> ^rtype <rtype>)
+   (<p2> ^rtype <rtype2>)
+   (<p3> ^rtype <rtype3>)
+   (<p4> ^rtype <rtype4>)
+-->
+   (<c> ^formatted true)
+   (<s> ^prefer <n12> ^nlp <n> <n2>)
+   (<n12> ^1 <n> ^2 <n2>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute action ^rtype <rtype> ^verb <prep>)
+   (<n2> ^name <name2> ^args <ab> ^parameter <parab> ^type concept ^attribute action ^rtype <rtype3> ^verb <prep2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <id> ^type <rtype>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+   (<parab> ^1 <para3> ^2 <para4>)
+   (<para3> ^param-id <id3> ^type <rtype3>)
+   (<para4> ^param-id <id4> ^type <rtype4>)
+}
+
 
 sp {convert-parsed-format*apply*handle-pref-action2*noarg2
    (state <s> ^name convert-parsed-format
@@ -1216,9 +1409,10 @@ sp {convert-parsed-format*propose*handle-predicate*attribute-of
    (<o> ^name handle-predicate
         ^predicate <p>)
 }
-
+#(<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
 sp {convert-parsed-format*apply*handle-predicate*reverseorder-of
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1226,6 +1420,8 @@ sp {convert-parsed-format*apply*handle-predicate*reverseorder-of
    (<p2> ^handle of1 ^2 <c2>)
    (<c2> ^formatted <f2> ^parameter-index <id2>)
    (<f2> ^rtype <rtype2>)
+ -{(state <s>)
+   (<s> -^superstate.world.objects.object.predicates.<name>)}  
 -->
    (<c> ^formatted <n>)
    (<s> ^object-count <oc> -)
@@ -1235,6 +1431,72 @@ sp {convert-parsed-format*apply*handle-predicate*reverseorder-of
    (<a> ^2 <f2>)
    (<para> ^1 <para1> ^2 <para2>)
    (<para1> ^param-id <oc> ^type <rtype2>)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
+sp {convert-parsed-format*apply*handle-predicate*reverseorder-of*concept
+   (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
+              ^object-count <oc>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle <name> ^relation <p2> -^equal-to.formatted -^handle number1)
+   (<p2> ^handle of1 ^2 <c2>)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+ -{(state <s>)
+   (<s> ^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^object-count <oc> -)
+   (<s> ^object-count (+ <oc> 1))
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype <rtype2> ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <oc> ^type <rtype2>)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
+
+sp {convert-parsed-format*apply*handle-predicate*reverseorder-of*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^object-count <oc>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle <name> ^relation <p2> -^equal-to.formatted -^handle number1)
+   (<p2> ^handle of1 ^2 <c2>)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+ -{(state <s>)
+   (<s> -^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type attribute-of ^rtype <rtype2> ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type <rtype2>)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
+sp {convert-parsed-format*apply*handle-predicate*reverseorder-of*output*concept
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^object-count <oc>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle <name> ^relation <p2> -^equal-to.formatted -^handle number1)
+   (<p2> ^handle of1 ^2 <c2>)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+ -{(state <s>)
+   (<s> ^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype <rtype2> ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type <rtype2>)
    (<para2> ^param-id <id2> ^type <rtype2>)   
 }
 
@@ -1344,6 +1606,7 @@ sp {convert-parsed-format*apply*handle-predicate*equal-exists*reverse
 #in general need smem to determine learned or primitive
 sp {convert-parsed-format*apply*handle-predicate
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1364,7 +1627,70 @@ sp {convert-parsed-format*apply*handle-predicate
    (<para1> ^param-id <oc> ^type <rtype2>)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
+sp {convert-parsed-format*apply*handle-predicate*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent)
+   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+  -{(state <s>)
+     (<s> -^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type attribute-of ^rtype <rtype2> ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type <rtype2>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
 
+sp {convert-parsed-format*apply*handle-predicate*concept
+   (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
+              ^object-count <oc>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent) #^equal-to.property.handle number)
+   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+  -{(state <s>)
+     (<s> ^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^object-count <oc> -)
+   (<s> ^object-count (+ <oc> 1))
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id <oc> ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+sp {convert-parsed-format*apply*handle-predicate*output*concept
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent) #^equal-to.property.handle number)
+   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+  -{(state <s>)
+     (<s> ^superstate.world.objects.object.predicates.<name>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
 #TODO need smem checks are terms primitive vs non not checking topstate
 #TODO fold into create-object so no duplicate test of param-id
 sp {convert-parsed-format*apply*handle-predicate*attribute*absent
@@ -1391,6 +1717,7 @@ sp {convert-parsed-format*apply*handle-predicate*attribute*absent
 
 sp {convert-parsed-format*apply*handle-predicate*of*learned
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1414,8 +1741,33 @@ sp {convert-parsed-format*apply*handle-predicate*of*learned
    (<para1> ^param-id <oc> ^type single)#^type <rtype2>)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
+sp {convert-parsed-format*apply*handle-predicate*of*learned*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent -^equal-to.property.handle number)
+   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+   (<c2> ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+ -{(state <s>)
+   (<s> ^superstate.world.objects.object.predicates.<name>)}  
+-{(state <s>)
+   (<s> ^clause <ca>)
+   (<ca> ^arg1 <c> ^predicate.handle << more-than1 less-than1 >>)}  
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single)#TODO verify always single when of#^rtype <rtype2>) #sometimes return-type number... need to look at concept
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)#^type <rtype2>)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+
 sp {convert-parsed-format*apply*handle-predicate*of*learned*number
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^clause <ca>
               ^operator <o>)
@@ -1438,28 +1790,72 @@ sp {convert-parsed-format*apply*handle-predicate*of*learned*number
    (<para1> ^param-id <oc> ^type single)#^type <rtype2>)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
-sp {convert-parsed-format*apply*handle-predicate*of*learned*single-number
+sp {convert-parsed-format*apply*handle-predicate*of*learned*number*output
    (state <s> ^name convert-parsed-format
-              ^object-count <oc>
+              ^output-object-1 <c>
+              ^clause <ca>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
-   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent ^equal-to.property.handle number)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent -^equal-to.property.handle number)
    (<p2> ^handle <name> ^2 <c2> -^handle number1)
    (<c2> ^formatted <f2> ^parameter-index <id2>)
    (<f2> ^rtype <rtype2>)
+   (<ca> ^arg1 <c> ^predicate.handle << more-than1 less-than1 >>)
  -{(state <s>)
    (<s> ^superstate.world.objects.object.predicates.<name>)}  
 -->
    (<c> ^formatted <n>)
-   (<s> ^object-count <oc> -)
-   (<s> ^object-count (+ <oc> 1))
    (<s> ^nlp <n>)
-   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)#TODO verify always single when of#^rtype <rtype2>) #sometimes return-type number... need to look at concept
    (<a> ^2 <f2>)
    (<para> ^1 <para1> ^2 <para2>)
-   (<para1> ^param-id <oc> ^type single)
+   (<para1> ^param-id 1 ^type single)#^type <rtype2>)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
+
+#sp {convert-parsed-format*apply*handle-predicate*of*learned*single-number
+#   (state <s> ^name convert-parsed-format
+#              ^object-count <oc>
+#             -^output-object-1 <c>
+#              ^operator <o>)
+#   (<o> ^name handle-predicate ^predicate <c>)
+#   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent ^equal-to.property.handle number)
+#   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+#   (<c2> ^formatted <f2> ^parameter-index <id2>)
+#   (<f2> ^rtype <rtype2>)
+# -{(state <s>)
+#   (<s> ^superstate.world.objects.object.predicates.<name>)}  
+#-->
+#   (<c> ^formatted <n>)
+#   (<s> ^object-count <oc> -)
+#   (<s> ^object-count (+ <oc> 1))
+#   (<s> ^nlp <n>)
+#   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
+#   (<a> ^2 <f2>)
+#   (<para> ^1 <para1> ^2 <para2>)
+#   (<para1> ^param-id <oc> ^type single)
+#   (<para2> ^param-id <id2> ^type <rtype2>)
+#}
+#sp {convert-parsed-format*apply*handle-predicate*of*learned*single-number*output
+#   (state <s> ^name convert-parsed-format
+#              ^output-object-1 <c>
+#              ^operator <o>)
+#   (<o> ^name handle-predicate ^predicate <c>)
+#   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted -^equal-to.handle absent ^equal-to.property.handle number)
+#   (<p2> ^handle <name> ^2 <c2> -^handle number1)
+#   (<c2> ^formatted <f2> ^parameter-index <id2>)
+#   (<f2> ^rtype <rtype2>)
+# -{(state <s>)
+#   (<s> ^superstate.world.objects.object.predicates.<name>)}  
+#-->
+#   (<c> ^formatted <n>)
+#   (<s> ^nlp <n>)
+#   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype single ^return-type number)
+#   (<a> ^2 <f2>)
+#   (<para> ^1 <para1> ^2 <para2>)
+#   (<para1> ^param-id 1 ^type single)
+#   (<para2> ^param-id <id2> ^type <rtype2>)
+#}
 
 sp {convert-parsed-format*apply*handle-predicate*equal-exists
    (state <s> ^name convert-parsed-format
@@ -1600,6 +1996,7 @@ sp {convert-parsed-format*apply*handle-predicate*unary-property*equal
 #for now store predifine number-of to count
 sp {convert-parsed-format*apply*handle-predicate*count
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1616,6 +2013,24 @@ sp {convert-parsed-format*apply*handle-predicate*count
    (<a> ^2 <f2>)
    (<para> ^1 <para1> ^2 <para2>)
    (<para1> ^param-id <oc> ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>) 
+}
+sp {convert-parsed-format*apply*handle-predicate*count*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
+   (<p2> ^2 <c2> ^handle number1)
+   (<c2> -^new-formatted ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+    (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name count ^args <a> ^parameter <para> ^type function ^function soar-count ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>) 
 }
 
@@ -1710,6 +2125,7 @@ sp {convert-parsed-format*apply*handle-predicate*product*output
 
 sp {convert-parsed-format*apply*handle-predicate*count*reverse
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1728,10 +2144,29 @@ sp {convert-parsed-format*apply*handle-predicate*count*reverse
    (<para1> ^param-id <oc> ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)   
 }
+sp {convert-parsed-format*apply*handle-predicate*count*reverse*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle number1 ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> -^new-formatted ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name count ^args <a> ^parameter <para> ^type function ^function soar-count ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
 
 sp {convert-parsed-format*apply*handle-predicate*sum*reverse
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle sum ^relation <p2> -^equal-to.formatted ^property)
@@ -1749,8 +2184,28 @@ sp {convert-parsed-format*apply*handle-predicate*sum*reverse
    (<para1> ^param-id <oc> ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)   
 }
+sp {convert-parsed-format*apply*handle-predicate*sum*reverse*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle sum ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> -^new-formatted ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name sum ^args <a> ^parameter <para> ^type function ^function soar-sum ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
+
 sp {convert-parsed-format*apply*handle-predicate*product*reverse
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1767,6 +2222,24 @@ sp {convert-parsed-format*apply*handle-predicate*product*reverse
    (<a> ^2 <f2>)
    (<para> ^1 <para1> ^2 <para2>)
    (<para1> ^param-id <oc> ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)   
+}
+sp {convert-parsed-format*apply*handle-predicate*product*reverse*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle product ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> -^new-formatted ^formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name product ^args <a> ^parameter <para> ^type function ^function soar-product ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)   
 }
 
@@ -1961,6 +2434,7 @@ sp {convert-parsed-format*apply*handle-predicate*product*equal*new-formatted
 
 sp {convert-parsed-format*apply*handle-predicate*count*new-formatted
    (state <s> ^name convert-parsed-format
+             -^output-object-1 <c>
               ^object-count <oc>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
@@ -1980,9 +2454,29 @@ sp {convert-parsed-format*apply*handle-predicate*count*new-formatted
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
 
+sp {convert-parsed-format*apply*handle-predicate*count*new-formatted*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
+   (<p2> ^2 <c2> ^handle number1)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name count ^args <a> ^parameter <para> ^type function ^function soar-count ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+
 sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
@@ -2000,9 +2494,29 @@ sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted
    (<para1> ^param-id <oc> ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)  
 }
+
+sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
+   (<p2> ^2 <c2> ^handle sum)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name sum ^args <a> ^parameter <para> ^type function ^function soar-sum ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)  
+}
 sp {convert-parsed-format*apply*handle-predicate*product*new-formatted
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
@@ -2021,9 +2535,29 @@ sp {convert-parsed-format*apply*handle-predicate*product*new-formatted
    (<para2> ^param-id <id2> ^type <rtype2>)  
 }
 
+sp {convert-parsed-format*apply*handle-predicate*product*new-formatted*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle of1 ^2 <p2> -^equal-to.formatted)
+   (<p2> ^2 <c2> ^handle product)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name product ^args <a> ^parameter <para> ^type function ^function soar-product ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)  
+}
+
 sp {convert-parsed-format*apply*handle-predicate*count*new-formatted*reversed
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle number1 ^relation <p2> -^equal-to.formatted ^property)
@@ -2041,10 +2575,29 @@ sp {convert-parsed-format*apply*handle-predicate*count*new-formatted*reversed
    (<para1> ^param-id <oc> ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
+sp {convert-parsed-format*apply*handle-predicate*count*new-formatted*reversed*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle number1 ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name count ^args <a> ^parameter <para> ^type function ^function soar-count ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
 
 sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted*reversed
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle sum ^relation <p2> -^equal-to.formatted ^property)
@@ -2062,9 +2615,30 @@ sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted*reversed
    (<para1> ^param-id <oc> ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
+
+sp {convert-parsed-format*apply*handle-predicate*sum*new-formatted*reversed*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle sum ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name sum ^args <a> ^parameter <para> ^type function ^function soar-sum ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+
 sp {convert-parsed-format*apply*handle-predicate*product*new-formatted*reversed
    (state <s> ^name convert-parsed-format
               ^object-count <oc>
+             -^output-object-1 <c>
               ^operator <o>)
    (<o> ^name handle-predicate ^predicate <c>)
    (<c> ^handle product ^relation <p2> -^equal-to.formatted ^property)
@@ -2080,6 +2654,24 @@ sp {convert-parsed-format*apply*handle-predicate*product*new-formatted*reversed
    (<a> ^2 <f2>)
    (<para> ^1 <para1> ^2 <para2>)
    (<para1> ^param-id <oc> ^type single)
+   (<para2> ^param-id <id2> ^type <rtype2>)
+}
+sp {convert-parsed-format*apply*handle-predicate*product*new-formatted*reversed*output
+   (state <s> ^name convert-parsed-format
+              ^output-object-1 <c>
+              ^operator <o>)
+   (<o> ^name handle-predicate ^predicate <c>)
+   (<c> ^handle product ^relation <p2> -^equal-to.formatted ^property)
+   (<p2> ^2 <c2> ^handle of1)
+   (<c2> ^new-formatted <f2> ^parameter-index <id2>)
+   (<f2> ^rtype <rtype2>)
+-->
+   (<c> ^formatted <n>)
+   (<s> ^nlp <n>)
+   (<n> ^name product ^args <a> ^parameter <para> ^type function ^function soar-product ^rtype single ^return-type number)
+   (<a> ^2 <f2>)
+   (<para> ^1 <para1> ^2 <para2>)
+   (<para1> ^param-id 1 ^type single)
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
 
@@ -2984,6 +3576,27 @@ sp {convert-parsed-format*apply*handle-clause*parameter*concept
    (<para2> ^param-id <id2> ^type <rtype2>)
 }
 
+sp {convert-parsed-format*apply*handle-clause*parameter*concept*no*rtype*indef
+   (state <s> ^name convert-parsed-format
+             -^superstate.world.predicates.predicate.handle <name>
+              ^indef <c2> 
+              ^operator <o>)
+   (<o> ^name handle-clause ^parameter <c1>)
+   (<c1> ^relation <r>)
+   (<r> ^handle <name> ^2 <c2> -^3)
+   (<c1> ^formatted <p> ^parameter-index <id> -^rtype)
+   (<c2> ^formatted <p2> -^parameter-index)
+   (<p> ^rtype <rtype>)
+-->
+   (<c1> ^new-formatted <n>) 
+   (<r> ^formatted true)
+   (<s> ^nlp <n>)
+   (<n> ^name <name> ^args <a> ^parameter <para> ^type concept ^attribute predicate ^rtype <rtype>)
+   (<a> ^1 <p> ^2 <p2>)
+   (<para> ^1 <para1>)
+   (<para1> ^param-id <id> ^type <rtype>)
+}
+
 sp {convert-parsed-format*apply*handle-clause*parameter*concept*no*rtype
    (state <s> ^name convert-parsed-format
              -^superstate.world.predicates.predicate.handle <name>
@@ -3134,6 +3747,20 @@ sp {convert-parsed-format*apply*complete*only-objects
    (<s> ^nlp <p>)
    (<para> ^1 <p2>)
    (<p2> ^param-id <id>)
+}
+
+sp {convert-parsed-format*apply*complete*only-input-objects
+#:interrupt
+   (state <s> ^name convert-parsed-format
+              ^operator.name complete
+             -^indef <pp>
+              ^<< input-object-1 input-object-2 >> <pp>)
+   (<pp> ^formatted <p> ^parameter-index <id>)
+   (<p> ^attribute input-arg)
+   -{(<s> ^nlp <nlp>)
+     (<nlp> ^args.<num> <p> ^parameter.<num>.param-id <id>)}
+-->
+   (<s> ^nlp <p>)
 }
 
 sp {convert-parsed-format*apply*complete*superstate*copy

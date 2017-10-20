@@ -181,7 +181,6 @@ sp {store-predicate-structure*elaborate*top-state*dialogue-context*failure
    (<dc> ^learn-link <pred2> ^needs-failure-setup true)
 }
 
-
 sp {store-predicate-structure*elaborate*top-state*dialogue-context*action
    (state <s> ^name store-predicate-structure
               ^operator.name complete
@@ -221,7 +220,7 @@ sp {store-predicate-structure*propose*transfer-action-goal
               ^ptype <type> 
               ^handle <handle>)
 -->
-(interrupt)
+#(interrupt)
     (<s> ^operator <o> + >)
     (<o> ^name transfer-action-goal
          ^check yes
