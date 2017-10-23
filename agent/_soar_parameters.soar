@@ -28,6 +28,7 @@ chunk max-chunks 1000
 explain all on
 explain justifications on
 
+chunk add-osk off
 chunk singleton state problem-space identifier
 chunk singleton state action-operator identifier
 chunk singleton state world identifier
