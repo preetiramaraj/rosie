@@ -46,19 +46,23 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieve-handle-LTI
    (<cond> ^name <name>
            ^args <args>)
 -->   
-   (<cmd> ^query <q> ^depth 5)
+   (<cmd> ^query <q> ^depth 5 ^neg-query <neg>)
    (<q> ^handle <name>)
+   (<neg> ^predicate-structure <pred> # So that handle lti linked to lti with structure-type is retrieved
+          ^multiple <mult> # In order to account for singular/plural word having the same handle block/blocks
+   )
 }   
 
 # After retrieval - retrieve LTI whose relation is current LTI (and that has the part of speech)
-sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-handle-LTI-success*retrieve-LTI-with-relation
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-handle-LTI-success*retrieve-LTI-with-referent
    (state <s> ^name dialog-event
               ^operator <o>
               ^smem <smem>
               ^PR-game-details)
    (<smem> ^result.retrieved <ret>
            ^command <cmd>)
-   (<cmd> ^query <q> ^depth 5)
+   (<cmd> ^query <q> ^depth 5
+          ^neg-query <neg>)
    (<q> ^handle <name>)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
@@ -66,13 +70,14 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-handle-LTI-success*r
            ^args <args>)
 --> 
    (<cmd> ^query <q> -
-          ^depth 5 -)
+          ^depth 5 -
+          ^neg-query <neg> -)
    (<cmd> ^query <qu> ^depth 5)
-   (<qu> ^relation <ret>
+   (<qu> ^referent <ret>
          ^structure-type <str>) 
 }
 
-sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-with-relation-success
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-with-referent-success
    (state <s> ^name dialog-event
               ^operator <o>
               ^smem <smem>
@@ -81,7 +86,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-with-relation-su
            ^result.retrieved <tret>) 
    (<tret> ^structure-type <str>)
    (<cmd> ^query <qu> ^depth 5)
-   (<qu> ^relation <ret>)   
+   (<qu> ^referent <ret>)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
    (<cond> ^name <name>
@@ -92,7 +97,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-with-relation-su
           ^depth 5 -)
 }
 
-sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-relation-failure*retrieve-with-referent
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-referent-failure*retrieve-with-relation
    (state <s> ^name dialog-event
               ^operator <o>
               ^smem <smem>
@@ -100,28 +105,28 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-relation-failure
    (<smem> ^command <cmd>
            ^result.failure <tret>) 
    (<cmd> ^query <qu> ^depth 5)
-   (<qu> ^relation <ret>)   
+   (<qu> ^referent <ret>)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
    (<cond> ^name <name>
            ^args <args>)
 -->
-   (<cmd> ^query <qu> - 
+   (<cmd> ^query <qu> -
           ^query <qu1>)
-   (<qu1> ^referent <ret>
+   (<qu1> ^relation <ret>
           ^structure-type <str>)
 }
 
-sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-with-referent-success
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-with-relation-success
    (state <s> ^name dialog-event
               ^operator <o>
               ^smem <smem>
-              ^PR-game-details)  
+              ^PR-game-details)
    (<smem> ^command <cmd>
-           ^result.retrieved <tret>) 
+           ^result.retrieved <tret>)
    (<tret> ^structure-type <str>)
    (<cmd> ^query <qu> ^depth 5)
-   (<qu> ^referent <ret>)   
+   (<qu> ^relation <ret>)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
    (<cond> ^name <name>
@@ -131,6 +136,48 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-with-referent-succes
    (<cmd> ^query <qu> -
           ^depth 5 -)
 }
+
+# When the word is a primitive relation/object and the POS is present in its super type
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-LTI-relation-failure*retrieve-with-super-type
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^smem <smem>
+              ^PR-game-details)  
+   (<smem> ^command <cmd>
+           ^result.failure <tret>) 
+   (<cmd> ^query <qu> ^depth 5)
+   (<qu>  ^relation <ret>
+          ^structure-type <str>)   
+   (<o> ^name get-part-of-speech-objDesc
+        ^condition <cond>)
+   (<cond> ^name <name>
+           ^args <args>)
+-->
+   (<qu> ^structure-type <str> -
+         ^super-type <super>)
+}
+
+sp {dialog-event*apply*get-part-of-speech-objDesc*retrieval-with-super-type-success
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^smem <smem>
+              ^PR-game-details)  
+   (<smem> ^command <cmd>
+           ^result.retrieved <tret>) 
+   (<tret> ^super-type <super>)
+   (<super> ^structure-type <str>)
+   (<cmd> ^query <qu> ^depth 5)
+   (<qu> ^relation <ret>)   
+   (<o> ^name get-part-of-speech-objDesc
+        ^condition <cond>)
+   (<cond> ^name <name>
+           ^args <args>)
+-->
+   (<cond> ^structure-type <str>)
+   (<cmd> ^query <qu> -
+          ^depth 5 -)
+}
+# PR - todo maybe for ^name number, add a structure-type called number, as a rule on the bottom
 
 # add argument condition to new set when condition is not primitive
 sp {dialog-event*apply*get-part-of-speech-objDesc*add-to-new-set*not-primitive
@@ -142,8 +189,9 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*add-to-new-set*not-primitive
         ^condition <cond>)
    (<cond> ^name <name>
            ^args <args>
-           ^structure-type <str>
-           ^attribute { <> primitive <att> })
+           ^structure-type <str>)
+   -{(<cond> -^attribute { <> primitive <att> })
+     (<cond> -^return-type number)} #type << function attribute-of >>)}
    (<args> ^<num> <new-cond>)
    (<new-cond> ^attribute)
 -->
@@ -162,7 +210,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*add-to-new-set*primitive
    (<cond> ^name <name>
            ^args <args>
            ^structure-type <str>
-           ^attribute primitive)
+           ^attribute << primitive input-arg >>)
 -->
    (<cond> ^POS-retrieved true)
 }
