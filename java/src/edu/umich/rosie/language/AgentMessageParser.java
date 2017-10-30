@@ -1606,55 +1606,65 @@ public class AgentMessageParser
 	{
 		String description = "";
 		String attribute_value = SoarUtil.getValueOfAttribute(objId, "attribute");
-		String prev_attribute = "";
-		String set = SoarUtil.getValueOfAttribute(objId, "rtype");
-        String type="";
-		
-		while (!(attribute_value.equals("primitive") ||  attribute_value.equals("input-arg")))
+		if(attribute_value == null)
 		{
 			description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
-			Identifier arg = SoarUtil.getIdentifierOfAttribute(objId, "args");
-			Identifier arg1 = SoarUtil.getIdentifierOfAttribute(arg, "1");
-			prev_attribute = attribute_value;
-			attribute_value = SoarUtil.getValueOfAttribute(arg1, "attribute");
-			type = SoarUtil.getValueOfAttribute(objId, "type");
-			objId = arg1;
 		}
-		
-		// PR - figure this object thing out, this may not be worth it in this case.
-		// This is in case the "object" is directly referred in the statement, it must not be ignored. For e.g. in stack-block, a clear object is larger-than a clear block.
-		//if(!prev_attribute.equals("category"))
-		//{
-		//	description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
-		//}
-
-		if(attribute_value.equals("input-arg") || type.equals("concept") || prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
-		{
-			description += "object ";
+		else
+		{	String prev_attribute = "";
+			String set = SoarUtil.getValueOfAttribute(objId, "rtype");
+	        String type="";
+			// PR - TODO: count has attribute-value null
+	        
+			while (!(attribute_value.equals("primitive") ||  attribute_value.equals("input-arg")))
+			{
+				description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
+				Identifier arg = SoarUtil.getIdentifierOfAttribute(objId, "args");
+				Identifier arg1 = SoarUtil.getIdentifierOfAttribute(arg, "1");
+				if(arg1 == null)
+				{
+					break;
+				}
+				prev_attribute = attribute_value;
+				attribute_value = SoarUtil.getValueOfAttribute(arg1, "attribute");
+				type = SoarUtil.getValueOfAttribute(objId, "type");
+				objId = arg1;
+			}
+			
+			// PR - figure this object thing out, this may not be worth it in this case.
+			// This is in case the "object" is directly referred in the statement, it must not be ignored. For e.g. in stack-block, a clear object is larger-than a clear block.
+			//if(!prev_attribute.equals("category"))
+			//{
+			//	description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
+			//}
+	
+			if(attribute_value.equals("input-arg"))// || type.equals("concept") || prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
+			{
+				description += "object ";
+			}
+			
+			if(set.equals("set"))
+			{
+				description = description.substring(0,description.length() - 1) + "s ";
+			}
 		}
-		
-		if(set.equals("set"))
-		{
-			description = description.substring(0,description.length() - 1) + "s ";
-		}
-		
 		return description;
 	}
 	
-	
+	// PR - TODO this function may not be necessary
 	public static List<String> getIndividualObjectPredicateForGame(Identifier objDescId)
 	{
 		String objectDescription = "";
 		String article = "";
 		String rtype = "";
 		
-		String negative = SoarUtil.getValueOfAttribute(objDescId, "negative");
+		/*String negative = SoarUtil.getValueOfAttribute(objDescId, "negative");
 		String satisfied = SoarUtil.getValueOfAttribute(objDescId, "satisfied");		
 		if(satisfied != null)
 		{
 			negative = satisfied;
 		}
-		
+		*/
 		Identifier objId1 = SoarUtil.getIdentifierOfAttribute(objDescId, "1");
 		
 		// Based on if the rtype is set or single, auxiliaryVerb will be set as "are" or "is"
@@ -1666,10 +1676,21 @@ public class AgentMessageParser
 		}
 		else
 		{
-			// This is an object without a param-id
+			// This is an object without a param-id => From id2
 			rtype = SoarUtil.getValueOfAttribute(objDescId, "rtype");
 			objectDescription += getObjectDescriptionForGames(objDescId);
 		}
+		
+		String type = SoarUtil.getValueOfAttribute(objDescId, "type");
+		if(type != null && type.equals("related-by-of"))
+		{
+			int param2 = Integer.parseInt(SoarUtil.getValueOfAttribute(objDescId, "2"));
+			//objectDescription, aux-verb, rtype, numberOfMentions,OfAttributeParamIdIfExists
+			List<String> objDesc_values = Arrays.asList((objectDescription + "of "), auxiliaryVerb, rtype, "0", Integer.toString(param2));
+			return objDesc_values;
+		}
+		// PR -preps don't exist in object descriptions here
+		/*
 		// Adding preposition to the description			
 		String prep = SoarUtil.getValueOfAttribute(objDescId, "prep");
 		if (prep == null)
@@ -1709,9 +1730,12 @@ public class AgentMessageParser
 		}
 		
 		objectDescription += article + object2_Desc;
-		List<String> objDesc_values = Arrays.asList(objectDescription, auxiliaryVerb, rtype, "0");
+		*/
+		// objectDescription, aux-verb, rtype, numberOfMentions,OfAttributeParamIdIfExists
+		List<String> objDesc_values = Arrays.asList(objectDescription, auxiliaryVerb, rtype, "0", "");
 		return objDesc_values;
 	}
+	
 	
 	// Creates object predicate phrases based on the predicates retrieved from specific games
 	public static HashMap<Integer, List<String>> getObjectPredicateForGames(Identifier descSetId)
@@ -1727,23 +1751,99 @@ public class AgentMessageParser
 				Integer param_id = Integer.parseInt(SoarUtil.getValueOfAttribute(objDescId, "param-id"));
 				List<String> objDesc_values = getIndividualObjectPredicateForGame(objDescId);
 				
-				if (!object_descs.containsKey(param_id))
+				if (!object_descs.containsKey(param_id)) // PR - TODO this won't work for count a is count b, i think you may have to do that the same way yo udid before.
 				{
 					// PR - Hack, this should be able to be done using lambda expressions object_descs.values().stream().anymatch(l -> l.contains(objectDescription)) in java 1.8
 					String objectDescription = objDesc_values.get(0);
 					//ArrayList<String> object_descs_values = (object_descs.values()).stream().filter(p -> p.get(0)).collect(Collectors.toList())
 					if(object_descs.values().contains(objectDescription))
 					{
-						objectDescription = "other " + objectDescription;
+						objectDescription = "other " + objectDescription; // PR - TODO this doesn't work
 					}
 					objDesc_values.set(0,objectDescription);
-					//List<String> objDesc_values = Arrays.asList(objectDescription, auxiliaryVerb, rtype, "0");
 					object_descs.put(param_id, objDesc_values);
 				}
 				objDescWME = descSetId.FindByAttribute("obj-desc", ++i);
 		}
 		
 		return object_descs;
+	}
+	
+
+	public static String getPrepositionPhrase(Identifier descId)
+	{
+		String prepPhrase="";
+		String negative = SoarUtil.getValueOfAttribute(descId, "negative");
+		String satisfied = SoarUtil.getValueOfAttribute(descId, "satisfied");
+		String structureType = SoarUtil.getValueOfAttribute(descId, "structure-type");
+		
+		if(satisfied != null)
+		{
+			negative = satisfied;
+		}
+		
+		if (negative.equals("true"))
+		{
+			prepPhrase = "not ";
+		}
+		else
+		{
+			prepPhrase = "";
+		}
+		
+//		// For statements of type "All locations are covered"
+//		String type = SoarUtil.getValueOfAttribute(descId, "type");
+//		if(type .equals("set-description"))
+//		{
+//			prepPhrase += SoarUtil.getValueOfAttribute(descId, "set-description");
+//		}
+		String prep = SoarUtil.getValueOfAttribute(descId, "prep");
+		if (prep != null)
+		{
+			prepPhrase += prep.replaceAll("\\d+.*","") + " ";
+			
+			if (structureType.equals("C-ADJ"))
+			{
+				prepPhrase += "than ";
+			}
+		}
+		
+		return prepPhrase;
+	}
+	
+	public static String getTypeDescription(Identifier descId)
+	{
+		String type = SoarUtil.getValueOfAttribute(descId, "type");
+		// Type: set-description "All locations are covered"
+		// Type: number "The count of a is 3"
+		if (type != null)
+		{
+			return SoarUtil.getValueOfAttribute(descId, type)+ " ";
+		}
+		
+		return "";
+	}
+	
+
+	public static String getConditionObjectDescription(HashMap<Integer, List<String>> object_descs, Integer param_id, Boolean firstPredicate)
+	{
+		// just husband will never ever feature by itself.. it always has to be husband of the woman, count of something, passenger of train etc,
+		// so call this function within condition description: when count has to turn up (count a is greater than count b)
+		// call this function so you can say "count of missionaries" instead
+		List<String> objDesc = object_descs.get(param_id);
+		String ofAttParamId = objDesc.get(4);
+		String objectDescription = addArticleForObjectDescription(objDesc) + objDesc.get(0);
+		if(!ofAttParamId.equals(""))
+		{
+			List<String> ofAttObjDesc = object_descs.get(Integer.parseInt(ofAttParamId));
+			objectDescription += addArticleForObjectDescription(ofAttObjDesc) + ofAttObjDesc.get(0); 
+		}
+		if(firstPredicate)
+		{
+			objectDescription += objDesc.get(1);
+		}
+			
+		return objectDescription;
 	}
 	
 	// Creates english statements based on the conditions and relations between objects specified as a part of conditions attribute in nlp-set in the games.
@@ -1758,22 +1858,24 @@ public class AgentMessageParser
 		{
 			String description = "";
 			Identifier conditionId = conditionVarWME.ConvertToIdentifier();
-			String negative = SoarUtil.getValueOfAttribute(conditionId, "negative");
-			String satisfied = SoarUtil.getValueOfAttribute(conditionId, "satisfied");
+			//String negative = SoarUtil.getValueOfAttribute(conditionId, "negative");
+			//String satisfied = SoarUtil.getValueOfAttribute(conditionId, "satisfied");
 			String article1 = "", article2="",article3="";
+			String prepPhrase = getPrepositionPhrase(conditionId);
 			Integer paramid1 = Integer.parseInt(SoarUtil.getValueOfAttribute(conditionId, "1"));
+			
 			List<String> objDesc1 = new ArrayList<String>();
 			
-			if(satisfied != null)
-			{
-				negative = satisfied;
-			}
+			//if(satisfied != null)
+			//{
+			//	negative = satisfied;
+			//}
 			
 			// Retrieving object descriptions and their corresponding auxiliary verbs
-			if (paramid1 != 0)
-			{
+			//if (paramid1 != 0)
+			//{
 				objDesc1 = object_descs.get(paramid1);
-			}
+			/*}
 			else
 			{
 				// This is for describing the unsatisfied object condition
@@ -1787,42 +1889,46 @@ public class AgentMessageParser
 				{
 					description += "I do not see ";
 				}
-			}
+			}*/
 			
-			article1 = addArticleForObjectDescription(objDesc1);
+			//article1 = addArticleForObjectDescription(objDesc1);
 			
 			// When the condition is represented using only one param-id hence only one predicate is in the condition for e.g.  block on a clear location in one predicate retrieved in the object description
 			String param2_string = SoarUtil.getValueOfAttribute(conditionId, "2");
+			
 			if(param2_string == null)
 			{
-				description += article1 + objDesc1.get(0);
+				//description += article1 + objDesc1.get(0) + objDesc1.get(1) + prepPhrase + getTypeDescription(conditionId);
+				description += getConditionObjectDescription(object_descs, paramid1, true) + prepPhrase + getTypeDescription(conditionId);
 				conditionVarWME = descSetId.FindByAttribute("description", ++k);
 				descriptionList.add(description);
-				//description += "and ";
 				continue;
 			}
 			
             Integer paramid2;
+            String objectDescription2;
             List<String> objDesc2 = new ArrayList<String>();
 			if(param2_string.equals("id2")) // If this is prepositional predicate where only first arg has param-id
 			{
 				Identifier id2_string = SoarUtil.getIdentifierOfAttribute(conditionId, "id2");
                 objDesc2 = getIndividualObjectPredicateForGame(id2_string);
+                objectDescription2 = addArticleForObjectDescription(objDesc2) + objDesc2.get(0);
 			}
 			else {
 				paramid2 = Integer.parseInt(param2_string);
-                objDesc2 = object_descs.get(paramid2);
+				objectDescription2 = getConditionObjectDescription(object_descs, paramid2, false);
+                //objDesc2 = object_descs.get(paramid2);
             }
 		
-			if(objDesc2 != null)
+			/*if(objDesc2 != null)
 			{
 				article2 = addArticleForObjectDescription(objDesc2);
-			}
+			}*/
 			
-			String prep = SoarUtil.getValueOfAttribute(conditionId, "prep");
+			//String prep = SoarUtil.getValueOfAttribute(conditionId, "prep");
 			
 			// When the condition involves two object descriptions w.r.t one that have been combined to form a predicate for e.g. a block on a location that is next to a clear location
-			if(prep == null)
+			/*if(prep == null)
 			{
 				String prep1 = SoarUtil.getValueOfAttribute(conditionId, "prep1").replace("1","");
 				String prep2 = SoarUtil.getValueOfAttribute(conditionId, "prep2").replace("1","");
@@ -1837,55 +1943,56 @@ public class AgentMessageParser
 				descriptionList.add(description);
 				//description += "and ";
 				continue;
-			}
+			}*/
 
 			String name = SoarUtil.getValueOfAttribute(conditionId, "name");
 								
 			// When the condition involves the param-ids/values of two predicates being the same for e.g. the color of A is red/the color of A is the color of B
-			if (name != null)
-			{
-				String equalcondition_article = SoarUtil.getValueOfAttribute(conditionId, "article");
-				String aux_verb = "";
-				if(negative.equals("true"))
-				{
-					aux_verb = "is not ";	
-				}
-				else
-				{
-					aux_verb = "is ";
-				}
-				
-				if (prep.equals("number"))
-				{
-					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + param2_string + " ";
-				}
-				else if (prep.equals("relation"))
-				{
-					String relation = SoarUtil.getValueOfAttribute(conditionId, "relation") + " than ";
-					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + relation + equalcondition_article + name + " of " + article2 + objDesc2.get(0);  	 			
-				}
-				else
-				{
-					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + equalcondition_article + name + " of " + article2 + objDesc2.get(0);
-				}
-				
-				conditionVarWME = descSetId.FindByAttribute("description", ++k);
-                descriptionList.add(description);
-				//description += "and ";
-				continue;
-			}
+//			if (name != null)
+//			{
+//				String equalcondition_article = SoarUtil.getValueOfAttribute(conditionId, "article");
+////				String aux_verb = "";
+////				if(negative.equals("true"))
+////				{
+////					aux_verb = "is not ";	
+////				}
+////				else
+////				{
+////					aux_verb = "is ";
+////				}
+//				
+//				if (prep.equals("number"))
+//				{
+//					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + param2_string + " ";
+//				}
+//				else if (prep.equals("relation"))
+//				{
+//					String relation = SoarUtil.getValueOfAttribute(conditionId, "relation") + " than ";
+//					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + relation + equalcondition_article + name + " of " + article2 + objDesc2.get(0);  	 			
+//				}
+//				else
+//				{
+//					description += equalcondition_article + name + " of " + article1 + objDesc1.get(0) + aux_verb + equalcondition_article + name + " of " + article2 + objDesc2.get(0);
+//				}
+//				
+//				conditionVarWME = descSetId.FindByAttribute("description", ++k);
+//                descriptionList.add(description);
+//				//description += "and ";
+//				continue;
+//			}
 			
-			prep = prep.replace("1","");
-			if(prep.equals("adjacent"))
-			{
-				prep += " to";
-			}
-			if(negative != null && negative.equals("true"))
-			{	
-				prep = "not " + prep;
-			}
+//			prep = prep.replace("1","");
+//			if(prep.equals("adjacent")) // PR -Todo put this in a function that gets the helping prep:- adjacent=to greater=than and also adding the not as required
+//			{
+//				prep += " to";
+//			}
+//			if(negative != null && negative.equals("true"))
+//			{	
+//				prep = "not " + prep;
+//			}
 			
-			description += article1 + objDesc1.get(0) + objDesc1.get(1) + prep + " " + article2 + objDesc2.get(0);
+			//description += article1 + objDesc1.get(0) + objDesc1.get(1) + prepPhrase + article2 + objDesc2.get(0);
+			description += getConditionObjectDescription(object_descs, paramid1, true) + prepPhrase + objectDescription2;
 			
 			conditionVarWME = descSetId.FindByAttribute("description", ++k);
 			descriptionList.add(description);
