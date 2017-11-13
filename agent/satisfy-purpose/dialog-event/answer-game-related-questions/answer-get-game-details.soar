@@ -1,5 +1,5 @@
 sp {dialog-event*agent-game-action-description*propose*get-game-details
-   (state <s> ^name dialog-event
+   (state <s> #^name dialog-event
               ^PR-game-details <val>
               -^generated
               -^combined
@@ -29,28 +29,6 @@ sp {states*apply*get-game-details*add-descriptions-to-state
    (<s> ^descriptions <descs>
         ^PR-game-details <val>)
 }
-
-# Specifically for resolve-satisfaction failure
-#sp {resolve-satisfaction-failure*apply*get-game-details*get-single-object-description
-#   (state <s> ^operator <o>
-#              ^name resolve-satisfaction-failure
-#              ^descriptions <descs>
-#              ^set <set>)
-#   (<o> ^name get-game-details)
-#   (<set> ^conditions <cond>)
-#   (<cond> ^name <name>
-#           ^args <args>
-#           ^parameter <param>
-#           ^type << attribute concept >>) # PR - TODO this will fail if the concept is a C-ADJ-P (like larger) or a N (husband), incorporate the POS to make an informed condition
-#   #(<param> ^num 0)
-#-->
-#   (<descs> ^description <desc>
-#            ^obj-desc <obj-desc>)
-#   (<desc> ^1 0
-#           ^obj-desc <obj-desc>)
-#   (<obj-desc> ^1 <cond>
-#               ^param-id 0)
-#}
 
 sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
    (state <s> ^name dialog-event
@@ -89,6 +67,7 @@ sp {states*apply*get-game-details*get-single-object-description
    (<descs> ^description <desc>
             ^obj-desc <obj-desc>)
    (<desc> ^type set-description
+           ^unsatisfied yes #if resolve-satisfaction-failure
            ^negative <neg>
            ^1 <param-id>
            ^set-description <name>)
@@ -120,39 +99,47 @@ sp {states*apply*get-game-details*retrieve-PP-predicate
             ^description <desc>)
    (<desc> ^prep <name>
            ^structure-type <str>
+           ^unsatisfied yes #if resolve-satisfaction-failure
            ^1 <param-id>
            ^2 id2
            ^negative <neg>
            ^id2 <obj2>)
-   (<obj-desc> #^prep <name>
-               ^1 <obj1>
-               #^2 <obj2>
+   (<obj-desc> ^1 <obj1>
                ^param-id <param-id>)
 }
 
-# also works for greater than 1 (in risk) where 1 does not have a param-id of its own
-sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-value-second-argument
+sp {states*apply*get-game-details*retrieve-PP-predicate*argument-level-condition
    (state <s> ^PR-game-details
               ^descriptions <descs>
               ^operator <o>
               ^set <set>)
-   (<descs> ^description <desc>)
+   (<o> ^name get-game-details)
+   (<set> -^conditions <cond>)
+   -{(<set> -^conditions.args.<< 1 2 3 >> <cond>)
+     (<descs> -^obj-desc.1.args.2 <cond>)}
+   (<cond> ^name <name>
+          ^args <args>
+       ^structure-type <str>
+          ^parameter <param>
+          ^negative <neg>
+          ^type state-pair)
+   (<args> ^1 <obj1>
+           ^2 <obj2>
+           -^3)
+   (<param> ^1 <first>
+            -^2)
+   (<first> ^param-id <param-id>) # PR - TODO you might have to consider the fact that this is a type single and not set, TODO handle it in soar
+-->
+   (<descs> ^obj-desc <obj-desc>
+            ^description <desc>)
    (<desc> ^prep <name>
+           ^structure-type <str>
            ^1 <param-id>
-           ^2 <id2>
+           ^2 id2
            ^negative <neg>
            ^id2 <obj2>)
-   (<obj2> ^name number
-            ^return-type number
-            ^result <res>)
-   (<res> ^set <res-set>)
-   (<res-set> ^instance <inst>)
-   (<inst> ^1 <res-val>)
--->
-   (<desc> ^type number
-           ^id2 <obj2> -
-           ^2 <id2> -
-           ^number <res-val>)
+   (<obj-desc> ^1 <obj1>
+               ^param-id <param-id>)
 }
 
 # More than one param-id in a prepositional phrase indicates the object in the PP is used somewhere else?
@@ -167,9 +154,45 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
    	   ^args <args>
    	   ^parameter <param>
    	   ^negative <neg>
-       ^structure-type <str>
-       #-^return-type number
-        )
+       ^structure-type <str>)
+   (<args> ^1 <obj1>
+           ^2 <obj2>
+           -^3) # PR - maybe remove -^3 and instead add a rule that adds a third value if it exists?
+   (<param> ^1 <first>
+            ^2 <second>)
+   (<first> ^param-id <param-id-1>) # PR - TODO you might have to consider the fact that this is a type single and not set
+   (<second> ^param-id <param-id-2>)
+-->
+   (<descs> ^description <desc>
+            ^obj-desc <obj-desc1>
+            ^obj-desc <obj-desc2>)
+   (<desc> ^prep <name>
+           ^structure-type <str>
+           ^unsatisfied yes #if resolve-satisfaction-failure # PR - this can only be done in top level condition
+           ^1 <param-id-1>
+           ^2 <param-id-2>
+   	       ^negative <neg>)
+   (<obj-desc1> ^1 <obj1>
+                ^param-id <param-id-1>)
+   (<obj-desc2> ^1 <obj2>
+                ^param-id <param-id-2>)
+}
+
+sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-level-condition
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              ^operator <o>
+              ^set <set>)
+   (<o> ^name get-game-details)
+   (<set> -^conditions <cond>)
+   -{(<set> -^conditions.args.<< 1 2 3 >> <cond>)
+     (<descs> -^obj-desc.1.args.2 <cond>)}
+   (<cond> ^name <name>
+           ^args <args>
+           ^parameter <param>
+           ^negative <neg>
+           ^structure-type <str>
+           ^type state-pair)
    (<args> ^1 <obj1>
            ^2 <obj2>
            -^3) # PR - maybe remove -^3 and instead add a rule that adds a third value if it exists?
@@ -185,7 +208,7 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
            ^structure-type <str>
            ^1 <param-id-1>
            ^2 <param-id-2>
-   	       ^negative <neg>)
+              ^negative <neg>)
    (<obj-desc1> ^1 <obj1>
                 ^param-id <param-id-1>)
    (<obj-desc2> ^1 <obj2>
@@ -210,12 +233,13 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribu
    (<obj2> -^type state-pair) 
 -->
    (<obj-desc1> ^type related-by-of
-                ^2 <param-id-2>) # Maybe make 2 param-id
+                ^2 <param-id-2>)
    (<descs> ^obj-desc <obj-desc2>)
    (<obj-desc2> ^1 <obj2>
                 ^param-id <param-id-2>)
 }
 
+# Modifying related-by-of obj-desc to account for its second parameter for e.g. editing "count-of" object-description to add object to it
 sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribute-of*state-pair
    (state <s> ^PR-game-details
               ^descriptions <descs>
@@ -240,14 +264,36 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribu
 -->
    (<obj-desc1> ^type related-by-of
                 ^2 <param-id-2>)
-   (<set> ^conditions <obj2>)
+}
+
+# Works for greater than 1 (in risk) where 1 does not have a param-id of its own
+sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-value-second-argument
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              ^operator <o>
+              ^set <set>)
+   (<descs> ^description <desc>)
+   (<desc> ^1 <param-id>
+           ^2 id2
+           ^negative <neg>
+           ^id2 <obj2>)
+   (<obj2> ^name number
+            ^return-type number
+            ^result <res>)
+   (<res> ^set <res-set>)
+   (<res-set> ^instance <inst>)
+   (<inst> ^1 <res-val>)
+-->
+   (<desc> ^type number
+           ^id2 <obj2> -
+           ^2 id2 -
+           ^number <res-val>)
 }
            
 # The following rule handles predicates with the same param-id for a given condition for e.g. Color of object A is color of object B, here both colors will have the same param-id
-# both predicates would have return-type number
-# PR - TODO a good way to label this would be param-idA and param-idB to distinguish both sides and store them.
-#or add a minus sign to one of it if hashmap will allow it.
-# or maybe not needed , because something will differ and if we don't have duplicate things, i don't need if condition on line 1754 it will work.
+# both predicates would have return-type number # PR - TODO a good way to label this would be param-idA and param-idB to distinguish both sides and store them.
+#or add a minus sign to one of it if hashmap wil allow it.# or maybe not needed , because something will differ and if we don't have duplicate things, i don't need if condition on line 1754 it will work.
+# PR - the order matters
 sp {states*apply*get-game-details*retrieve-attribute-based-conditions
    (state <s> ^PR-game-details
               ^descriptions <descs>
@@ -260,121 +306,121 @@ sp {states*apply*get-game-details*retrieve-attribute-based-conditions
            ^return-type number
            ^args <arg1>
            ^parameter <param1>)
-   (<cond2> ^name <name>
+   (<cond2> ^name <name1>
             ^return-type number
             ^args <arg2>
             ^parameter <param2>)
    (<param1> ^1.param-id <param-value>
-             ^2.param-id <param-obj1-id>)
+             #^2.param-id <param-obj1-id>
+             )
    (<param2> ^1.param-id <param-value>
-             ^2.param-id { <> <param-obj1-id> <param-obj2-id> })
-   (<arg1> -^1
-           ^2 <obj1>)
-   (<arg2> -^1
-           ^2 <obj2>)
+             #^2.param-id { <> <param-obj1-id> <param-obj2-id> }
+             )
+   (<arg1> -^1)
+#           ^2 <obj1>)
+   (<arg2> -^1)
+#           ^2 <obj2>)
 -->
    (<descs> ^obj-desc <obj-desc1>
             ^obj-desc <obj-desc2>
             ^description <desc>)
-   (<obj-desc1> ^1 <obj1>
-            ^param-id <param-obj1-id>)
-   (<obj-desc2> ^1 <obj2>
-            ^param-id <param-obj2-id>)
+   (<obj-desc1> ^1 <cond>
+            ^param-id <param-value>)
+   (<obj-desc2> ^1 <cond2>
+            ^param-id <param-value>)
    (<desc> #^name <name>
-   	       ^article |the |
+   	       #^article |the |
            ^negative false
-           ^prep is
-           ^1 <param-obj1-id>
-           ^2 <param-obj2-id>)
+           #^prep is
+           ^x <param-value>)
 }
+#PR - if it is not name number, then assign one of them negative param-ids
 
-# The following rule handles predicates with the same param-id where one of the predicates is an attribute and the other is a value (String/number), both predicates have
-# return-type number for e.g. The number of matched locations is 5
-sp {states*apply*get-game-details*retrieve-attribute-based-condition-and-value
+sp {states*apply*get-game-details*retrieve-same-param-id-conditions
    (state <s> ^PR-game-details
               ^descriptions <descs>
-              ^operator <o>
-        	  ^set <set>)
+              ^set <set>
+              ^operator <o>)
    (<o> ^name get-game-details)
-   (<set> ^conditions <cond>
-          ^conditions <cond2>)
-   (<cond> ^name <name>
-           ^return-type number
-           ^args <arg1>
-           ^parameter <param1>)
-   (<arg1> -^1
-           ^2 <obj1>)
-   (<cond2> ^name <name2>
-            ^return-type number
-            ^result <res>
-            ^parameter <param2>)
-   (<param1> ^1.param-id <param-value>
-             ^2.param-id <param-obj1-id>)
-   (<param2> ^1.param-id <param-value>)
-   (<res> ^set <res-set>)
-   (<res-set> ^instance <inst>)
-   (<inst> ^1 <res-val>)
--->
-   (<descs> ^obj-desc <desc1>
+   (<descs> ^obj-desc <obj-desc1>
+            ^obj-desc { <obj-desc2> < <obj-desc1> }
             ^description <desc>)
-   (<desc1> ^1 <obj1>
-            ^param-id <param-obj1-id>)
-   (<desc> #^name <name>
-           ^article |the |
-           ^negative blah #PR- TODO this may not need a negative at all but hack for now
-           ^prep number
-           ^1 <param-obj1-id>
-           ^2 <res-val>)
+   (<obj-desc1> ^1 <cond>
+                ^type related-by-of
+                ^param-id <param-value>)
+   (<obj-desc2> ^1 { <cond2> <> <cond> }
+                ^type related-by-of
+                ^param-id <param-value>)
+   (<cond> -^name number)  
+   (<cond2> -^name number)
+   (<desc> ^negative false
+           ^x <param-value>)
+-->
+   (<obj-desc2> ^param-id <param-value> -
+                 ^param-id ( - <param-value> ))
+   (<desc> ^x <param-value> -
+           ^1 <param-value>
+           ^2 (- <param-value> ))
 }
-
-# The following rule handles predicates with the same param-id where one of the predicates
- #is an attribute and the other is a value (String/number), both predicates have
- # The following rule handles predicates that are related using a function (greater-than,between)
- #where both attributes are functions (count ) or objects
-#sp {states*apply*get-game-details*retrieve-function-based-comparative-values
-#   (state <s> ^operator <o>
+   
+sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribute-of*make-negative
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              ^set <set>
+              ^operator <o>)
+   (<o> ^name get-game-details)
+   (<descs> ^obj-desc <obj-desc>
+            ^description <desc>)
+   (<desc> -^set-description
+            -^prep
+             ^negative <neg>
+             ^x <param-value>)
+   (<obj-desc> ^1 <cond>
+               ^param-id <param-value>)
+   (<cond> ^name number)
+-->
+   (<descs> ^obj-desc <obj-desc> -)
+   (<desc> ^2 id2
+           ^id2 <cond>
+           ^1 <param-value>)
+} 
+# The following rule handles predicates with the same param-id where one of the predicates is an attribute and the other is a value (String/number), both predicates have
+# return-type number for e.g. The number of matched locations is 5
+#sp {states*apply*get-game-details*retrieve-attribute-based-condition-and-value
+#   (state <s> ^PR-game-details
 #              ^descriptions <descs>
-#              ^set <set>)
+#              ^operator <o>
+#        	  ^set <set>)
 #   (<o> ^name get-game-details)
-#   (<set> ^conditions <cond>) #for answer-game-details all three conditions here?, does it matter? i wonder
-#   (<cond> ^name <relation>
+#   (<set> ^conditions <cond>
+#          ^conditions <cond2>)
+#   (<cond> ^name <name>
 #           ^return-type number
-#           ^args <args>
-#           ^parameter <param>
-#           ^negative <neg>)
-#   (<args> ^1 <cond1>
-#           ^2 { <> <cond1> <cond2> })
-#   (<param> ^1.param-id <param-cond1-id>
-#            ^2.param-id <param-cond2-id>) 
-#   (<cond1> ^name <name>
+#           ^args <arg1>
+#           ^parameter <param1>)
+#   (<arg1> -^1
+#           ^2 <obj1>)
+#   (<cond2> ^name <name2>
 #            ^return-type number
-#            ^args <args1>
-#            ^parameter <param1>)
-#   (<cond2> ^name <name>
-#            ^return-type number
-#            ^args <args2>
+#            ^result <res>
 #            ^parameter <param2>)
-#   (<args1> -^1
-#            ^2 <obj1>)
-#   (<param1> ^2.param-id <param-obj1-id>)
-#   (<args2> -^1
-#            ^2 <obj2>)
-#   (<param2> ^2.param-id <param-obj2-id>)
+#   (<param1> ^1.param-id <param-value>
+#             ^2.param-id <param-obj1-id>)
+#   (<param2> ^1.param-id <param-value>)
+#   (<res> ^set <res-set>)
+#   (<res-set> ^instance <inst>)
+#   (<inst> ^1 <res-val>)
 #-->
 #   (<descs> ^obj-desc <desc1>
-#            ^obj-desc <desc2>
 #            ^description <desc>)
 #   (<desc1> ^1 <obj1>
 #            ^param-id <param-obj1-id>)
-#   (<desc2> ^1 <obj2>
-#            ^param-id <param-obj2-id>)
-#   (<desc> ^name <name>
-#           ^relation <relation>
+#   (<desc> #^name <name>
 #           ^article |the |
-#           ^negative <neg>
-#           ^prep relation
+#           ^negative blah #PR- TODO this may not need a negative at all but hack for now
+#           ^prep number
 #           ^1 <param-obj1-id>
-#           ^2 <param-obj2-id>)
+#           ^2 <res-val>)
 #}
 
 # The following rule will fire only in case of actions that have verbs present in them       

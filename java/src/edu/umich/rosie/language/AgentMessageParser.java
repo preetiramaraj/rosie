@@ -1580,7 +1580,7 @@ public class AgentMessageParser
 	{
 		String article = "";
 		Integer numberOfMentions = Integer.parseInt(objDesc.get(3));
-		if((numberOfMentions > 0 && (objDesc.get(2)).equals("single")) || (objDesc.get(2)).equals("set"))
+		if((numberOfMentions > 0 && (objDesc.get(2)).equals("single")) || (objDesc.get(2)).equals("set") || !(objDesc.get(4).equals("")))
 		{
 			article = "the ";
 		}
@@ -1612,15 +1612,16 @@ public class AgentMessageParser
 		}
 		else
 		{	String prev_attribute = "";
+			String structure_type = ""; 
 			String set = SoarUtil.getValueOfAttribute(objId, "rtype");
 	        String type="";
-			// PR - TODO: count has attribute-value null
 	        
 			while (!(attribute_value.equals("primitive") ||  attribute_value.equals("input-arg")))
 			{
 				description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
 				Identifier arg = SoarUtil.getIdentifierOfAttribute(objId, "args");
 				Identifier arg1 = SoarUtil.getIdentifierOfAttribute(arg, "1");
+				structure_type = SoarUtil.getValueOfAttribute(objId, "structure-type");
 				if(arg1 == null)
 				{
 					break;
@@ -1631,14 +1632,7 @@ public class AgentMessageParser
 				objId = arg1;
 			}
 			
-			// PR - figure this object thing out, this may not be worth it in this case.
-			// This is in case the "object" is directly referred in the statement, it must not be ignored. For e.g. in stack-block, a clear object is larger-than a clear block.
-			//if(!prev_attribute.equals("category"))
-			//{
-			//	description += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
-			//}
-	
-			if(attribute_value.equals("input-arg"))// || type.equals("concept") || prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
+			if(attribute_value.equals("input-arg") || (attribute_value.equals("primitive") && (structure_type.equals("ADJ") || structure_type.equals("")))) //  prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
 			{
 				description += "object ";
 			}
@@ -1658,13 +1652,6 @@ public class AgentMessageParser
 		String article = "";
 		String rtype = "";
 		
-		/*String negative = SoarUtil.getValueOfAttribute(objDescId, "negative");
-		String satisfied = SoarUtil.getValueOfAttribute(objDescId, "satisfied");		
-		if(satisfied != null)
-		{
-			negative = satisfied;
-		}
-		*/
 		Identifier objId1 = SoarUtil.getIdentifierOfAttribute(objDescId, "1");
 		
 		// Based on if the rtype is set or single, auxiliaryVerb will be set as "are" or "is"
@@ -1689,48 +1676,7 @@ public class AgentMessageParser
 			List<String> objDesc_values = Arrays.asList((objectDescription + "of "), auxiliaryVerb, rtype, "0", Integer.toString(param2));
 			return objDesc_values;
 		}
-		// PR -preps don't exist in object descriptions here
-		/*
-		// Adding preposition to the description			
-		String prep = SoarUtil.getValueOfAttribute(objDescId, "prep");
-		if (prep == null)
-		{
-			List<String> objDesc_values = Arrays.asList(objectDescription, auxiliaryVerb, rtype, "0");
-			return objDesc_values;
-		}
 		
-		// Continue in case that the description is a prepositional phrase
-		prep = prep.replace("1","");
-		if(negative.equals("true"))
-		{
-			prep = "not " + prep;
-		}
-		
-		objectDescription += auxiliaryVerb + prep + " ";
-		
-		// Adding the second object in the condition to the object description
-		Identifier objId2 = SoarUtil.getIdentifierOfAttribute(objDescId, "2");
-		String object2_Desc = getObjectDescriptionForGames(objId2);
-		
-		// Setting article for the second object in the predicate in cases where the second object is not referred more than once.
-		if(auxiliaryVerb.equals("are "))
-		{
-			article = "the ";
-		}
-		else
-		{
-			if (startsWithVowel(object2_Desc))
-			{
-				article = "an ";
-			}
-			else
-			{
-				article = "a ";
-			}
-		}
-		
-		objectDescription += article + object2_Desc;
-		*/
 		// objectDescription, aux-verb, rtype, numberOfMentions,OfAttributeParamIdIfExists
 		List<String> objDesc_values = Arrays.asList(objectDescription, auxiliaryVerb, rtype, "0", "");
 		return objDesc_values;
@@ -1772,7 +1718,7 @@ public class AgentMessageParser
 
 	public static String getPrepositionPhrase(Identifier descId)
 	{
-		String prepPhrase="";
+		String prepPhrase = "";
 		String negative = SoarUtil.getValueOfAttribute(descId, "negative");
 		String satisfied = SoarUtil.getValueOfAttribute(descId, "satisfied");
 		String structureType = SoarUtil.getValueOfAttribute(descId, "structure-type");
@@ -1786,23 +1732,17 @@ public class AgentMessageParser
 		{
 			prepPhrase = "not ";
 		}
-		else
-		{
-			prepPhrase = "";
-		}
-		
-//		// For statements of type "All locations are covered"
-//		String type = SoarUtil.getValueOfAttribute(descId, "type");
-//		if(type .equals("set-description"))
-//		{
-//			prepPhrase += SoarUtil.getValueOfAttribute(descId, "set-description");
-//		}
+
 		String prep = SoarUtil.getValueOfAttribute(descId, "prep");
 		if (prep != null)
 		{
 			prepPhrase += prep.replaceAll("\\d+.*","") + " ";
 			
-			if (structureType.equals("C-ADJ"))
+			if(prep.equals("adjacent"))
+			{
+				prepPhrase += "to ";
+			}
+			else if (structureType != null && structureType.equals("C-ADJ"))
 			{
 				prepPhrase += "than ";
 			}
@@ -1827,9 +1767,6 @@ public class AgentMessageParser
 
 	public static String getConditionObjectDescription(HashMap<Integer, List<String>> object_descs, Integer param_id, Boolean firstPredicate)
 	{
-		// just husband will never ever feature by itself.. it always has to be husband of the woman, count of something, passenger of train etc,
-		// so call this function within condition description: when count has to turn up (count a is greater than count b)
-		// call this function so you can say "count of missionaries" instead
 		List<String> objDesc = object_descs.get(param_id);
 		String ofAttParamId = objDesc.get(4);
 		String objectDescription = addArticleForObjectDescription(objDesc) + objDesc.get(0);
@@ -1838,6 +1775,8 @@ public class AgentMessageParser
 			List<String> ofAttObjDesc = object_descs.get(Integer.parseInt(ofAttParamId));
 			objectDescription += addArticleForObjectDescription(ofAttObjDesc) + ofAttObjDesc.get(0); 
 		}
+		
+		// Since it is followed by an auxiliary verb only if it is the subject in the sentence
 		if(firstPredicate)
 		{
 			objectDescription += objDesc.get(1);
@@ -1858,40 +1797,11 @@ public class AgentMessageParser
 		{
 			String description = "";
 			Identifier conditionId = conditionVarWME.ConvertToIdentifier();
-			//String negative = SoarUtil.getValueOfAttribute(conditionId, "negative");
-			//String satisfied = SoarUtil.getValueOfAttribute(conditionId, "satisfied");
 			String article1 = "", article2="",article3="";
 			String prepPhrase = getPrepositionPhrase(conditionId);
 			Integer paramid1 = Integer.parseInt(SoarUtil.getValueOfAttribute(conditionId, "1"));
 			
-			List<String> objDesc1 = new ArrayList<String>();
-			
-			//if(satisfied != null)
-			//{
-			//	negative = satisfied;
-			//}
-			
-			// Retrieving object descriptions and their corresponding auxiliary verbs
-			//if (paramid1 != 0)
-			//{
-				objDesc1 = object_descs.get(paramid1);
-			/*}
-			else
-			{
-				// This is for describing the unsatisfied object condition
-				Identifier objDescId = SoarUtil.getIdentifierOfAttribute(conditionId, "obj-desc");
-				objDesc1 = getIndividualObjectPredicateForGame(objDescId);
-				if(objDesc1.get(2).equals("set"))
-				{
-					description += "I do not see all ";
-				}
-				else
-				{
-					description += "I do not see ";
-				}
-			}*/
-			
-			//article1 = addArticleForObjectDescription(objDesc1);
+			// List<String> objDesc1 = object_descs.get(paramid1);
 			
 			// When the condition is represented using only one param-id hence only one predicate is in the condition for e.g.  block on a clear location in one predicate retrieved in the object description
 			String param2_string = SoarUtil.getValueOfAttribute(conditionId, "2");
@@ -1917,16 +1827,8 @@ public class AgentMessageParser
 			else {
 				paramid2 = Integer.parseInt(param2_string);
 				objectDescription2 = getConditionObjectDescription(object_descs, paramid2, false);
-                //objDesc2 = object_descs.get(paramid2);
             }
 		
-			/*if(objDesc2 != null)
-			{
-				article2 = addArticleForObjectDescription(objDesc2);
-			}*/
-			
-			//String prep = SoarUtil.getValueOfAttribute(conditionId, "prep");
-			
 			// When the condition involves two object descriptions w.r.t one that have been combined to form a predicate for e.g. a block on a location that is next to a clear location
 			/*if(prep == null)
 			{
@@ -1979,16 +1881,6 @@ public class AgentMessageParser
 //                descriptionList.add(description);
 //				//description += "and ";
 //				continue;
-//			}
-			
-//			prep = prep.replace("1","");
-//			if(prep.equals("adjacent")) // PR -Todo put this in a function that gets the helping prep:- adjacent=to greater=than and also adding the not as required
-//			{
-//				prep += " to";
-//			}
-//			if(negative != null && negative.equals("true"))
-//			{	
-//				prep = "not " + prep;
 //			}
 			
 			//description += article1 + objDesc1.get(0) + objDesc1.get(1) + prepPhrase + article2 + objDesc2.get(0);
