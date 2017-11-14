@@ -26,8 +26,9 @@ sp {dialog-event*apply*add-auxiliary-verb-to-obj-desc*rtype-set
               ^descriptions <descs>
               ^generated yes)
    (<descs> ^obj-desc <obj-desc>)
-   (<obj-desc> ^1 <obj>)
-   (<obj> ^rtype set)
+   (<obj-desc> ^rtype set)
+#^1 <obj>)
+#   (<obj> ^rtype set)
 -->
    (<obj-desc> ^aux-verb |are |)
    (<s> ^added yes)
@@ -40,8 +41,9 @@ sp {dialog-event*apply*add-auxiliary-verb-to-obj-desc*rtype-single
               ^descriptions <descs>
               ^generated yes)
    (<descs> ^obj-desc <obj-desc>)
-   (<obj-desc> ^1 <obj>)
-   (<obj> ^rtype single)
+   (<obj-desc> ^rtype single)
+#^1 <obj>)
+   #(<obj> ^rtype single)
 -->
    (<obj-desc> ^aux-verb |is |)
    (<s> ^added yes)

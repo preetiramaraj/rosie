@@ -1652,21 +1652,64 @@ public class AgentMessageParser
 		String article = "";
 		String rtype = "";
 		
-		Identifier objId1 = SoarUtil.getIdentifierOfAttribute(objDescId, "1");
+		//Identifier objId1 = SoarUtil.getIdentifierOfAttribute(objDescId, "1");
+		Identifier objId;
 		
 		// Based on if the rtype is set or single, auxiliaryVerb will be set as "are" or "is"
 		String auxiliaryVerb = SoarUtil.getValueOfAttribute(objDescId, "aux-verb");
 		if(auxiliaryVerb != null)
 		{
 			rtype = auxiliaryVerb.equals("are ")?"set":"single";
-			objectDescription += getObjectDescriptionForGames(objId1);
+			//objectDescription += getObjectDescriptionForGames(objId1);
+			objId = SoarUtil.getIdentifierOfAttribute(objDescId, "1");
 		}
 		else
 		{
 			// This is an object without a param-id => From id2
 			rtype = SoarUtil.getValueOfAttribute(objDescId, "rtype");
-			objectDescription += getObjectDescriptionForGames(objDescId);
+			objId = objDescId;
+			//objectDescription += getObjectDescriptionForGames(objDescId);
 		}
+		
+		// Get object description
+		String attribute_value = SoarUtil.getValueOfAttribute(objId, "attribute");
+		if(attribute_value == null)
+		{
+			objectDescription += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
+		}
+		else
+		{	String prev_attribute = "";
+			String structure_type = "";
+			//String set = SoarUtil.getValueOfAttribute(objId, "rtype");
+	        //String type="";
+	        
+			while (!(attribute_value.equals("primitive") ||  attribute_value.equals("input-arg")))
+			{
+				objectDescription += SoarUtil.getValueOfAttribute(objId, "name").replaceAll("\\d+.*","") + " ";
+				Identifier arg = SoarUtil.getIdentifierOfAttribute(objId, "args");
+				Identifier arg1 = SoarUtil.getIdentifierOfAttribute(arg, "1");
+				structure_type = SoarUtil.getValueOfAttribute(objId, "structure-type");
+				if(arg1 == null)
+				{
+					break;
+				}
+				prev_attribute = attribute_value;
+				attribute_value = SoarUtil.getValueOfAttribute(arg1, "attribute");
+				//type = SoarUtil.getValueOfAttribute(objId, "type");
+				objId = arg1;
+			}
+			
+			if(attribute_value.equals("input-arg") || (attribute_value.equals("primitive") && (structure_type.equals("ADJ") || structure_type.equals("")))) //  prev_attribute.equals("")) // PR - except for husband/passenger, concepts tend to be adjectives
+			{
+				objectDescription += "object ";
+			}
+			
+			if(rtype.equals("set"))
+			{
+				objectDescription = objectDescription.substring(0,objectDescription.length() - 1) + "s ";
+			}
+		}
+		// Done with object-description
 		
 		String type = SoarUtil.getValueOfAttribute(objDescId, "type");
 		if(type != null && type.equals("related-by-of"))

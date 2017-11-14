@@ -72,6 +72,7 @@ sp {states*apply*get-game-details*get-single-object-description
            ^1 <param-id>
            ^set-description <name>)
    (<obj-desc> ^1 <obj1>
+               ^rtype <rtype>
                ^param-id <param-id>)
 }
 
@@ -93,7 +94,8 @@ sp {states*apply*get-game-details*retrieve-PP-predicate
            -^3)
    (<param> ^1 <first>
             -^2)
-   (<first> ^param-id <param-id>) # PR - TODO you might have to consider the fact that this is a type single and not set, TODO handle it in soar
+   (<first> ^param-id <param-id>
+            ^type <rtype>)
 -->
    (<descs> ^obj-desc <obj-desc>
             ^description <desc>)
@@ -105,7 +107,8 @@ sp {states*apply*get-game-details*retrieve-PP-predicate
            ^negative <neg>
            ^id2 <obj2>)
    (<obj-desc> ^1 <obj1>
-               ^param-id <param-id>)
+               ^param-id <param-id>
+               ^rtype <rtype>)
 }
 
 sp {states*apply*get-game-details*retrieve-PP-predicate*argument-level-condition
@@ -118,17 +121,18 @@ sp {states*apply*get-game-details*retrieve-PP-predicate*argument-level-condition
    -{(<set> -^conditions.args.<< 1 2 3 >> <cond>)
      (<descs> -^obj-desc.1.args.2 <cond>)}
    (<cond> ^name <name>
-          ^args <args>
-       ^structure-type <str>
-          ^parameter <param>
-          ^negative <neg>
-          ^type state-pair)
+           ^args <args>
+           ^structure-type <str>
+           ^parameter <param>
+           ^negative <neg>
+           ^type state-pair)
    (<args> ^1 <obj1>
            ^2 <obj2>
            -^3)
    (<param> ^1 <first>
             -^2)
-   (<first> ^param-id <param-id>) # PR - TODO you might have to consider the fact that this is a type single and not set, TODO handle it in soar
+   (<first> ^param-id <param-id>
+            ^type <rtype>)
 -->
    (<descs> ^obj-desc <obj-desc>
             ^description <desc>)
@@ -139,7 +143,8 @@ sp {states*apply*get-game-details*retrieve-PP-predicate*argument-level-condition
            ^negative <neg>
            ^id2 <obj2>)
    (<obj-desc> ^1 <obj1>
-               ^param-id <param-id>)
+               ^param-id <param-id>
+               ^rtype <rtype>)
 }
 
 # More than one param-id in a prepositional phrase indicates the object in the PP is used somewhere else?
@@ -160,22 +165,26 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
            -^3) # PR - maybe remove -^3 and instead add a rule that adds a third value if it exists?
    (<param> ^1 <first>
             ^2 <second>)
-   (<first> ^param-id <param-id-1>) # PR - TODO you might have to consider the fact that this is a type single and not set
-   (<second> ^param-id <param-id-2>)
+   (<first> ^param-id <param-id-1>
+            ^type <rtype1>)
+   (<second> ^param-id <param-id-2>
+             ^type <rtype2>)
 -->
    (<descs> ^description <desc>
             ^obj-desc <obj-desc1>
             ^obj-desc <obj-desc2>)
    (<desc> ^prep <name>
            ^structure-type <str>
-           ^unsatisfied yes #if resolve-satisfaction-failure # PR - this can only be done in top level condition
+           ^unsatisfied yes #if resolve-satisfaction-failure
            ^1 <param-id-1>
            ^2 <param-id-2>
    	       ^negative <neg>)
    (<obj-desc1> ^1 <obj1>
-                ^param-id <param-id-1>)
+                ^param-id <param-id-1>
+                ^rtype <rtype1>)
    (<obj-desc2> ^1 <obj2>
-                ^param-id <param-id-2>)
+                ^param-id <param-id-2>
+                ^rtype <rtype2>)
 }
 
 sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-level-condition
@@ -198,8 +207,10 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-le
            -^3) # PR - maybe remove -^3 and instead add a rule that adds a third value if it exists?
    (<param> ^1 <first>
             ^2 <second>)
-   (<first> ^param-id <param-id-1>) # PR - TODO you might have to consider the fact that this is a type single and not set
-   (<second> ^param-id <param-id-2>)
+   (<first> ^param-id <param-id-1>
+            ^type <rtype1>)
+   (<second> ^param-id <param-id-2>
+             ^type <rtype2>)
 -->
    (<descs> ^description <desc>
             ^obj-desc <obj-desc1>
@@ -210,9 +221,11 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-le
            ^2 <param-id-2>
               ^negative <neg>)
    (<obj-desc1> ^1 <obj1>
-                ^param-id <param-id-1>)
+                ^param-id <param-id-1>
+                ^rtype <rtype1>)
    (<obj-desc2> ^1 <obj2>
-                ^param-id <param-id-2>)
+                ^param-id <param-id-2>
+                ^rtype <rtype2>)
 }
 
 sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribute-of
@@ -227,7 +240,9 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribu
    (<obj1> ^args <args>
            ^parameter <param1>)
    (<param1> ^1.param-id <param-id-1>
-             ^2.param-id <param-id-2>)
+             ^2 <param2>)
+   (<param2> ^param-id <param-id-2>
+             ^type <rtype>)
    (<args> -^1
             ^2 <obj2>)
    (<obj2> -^type state-pair) 
@@ -236,7 +251,8 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribu
                 ^2 <param-id-2>)
    (<descs> ^obj-desc <obj-desc2>)
    (<obj-desc2> ^1 <obj2>
-                ^param-id <param-id-2>)
+                ^param-id <param-id-2>
+                ^rtype <rtype>)
 }
 
 # Modifying related-by-of obj-desc to account for its second parameter for e.g. editing "count-of" object-description to add object to it
@@ -305,11 +321,13 @@ sp {states*apply*get-game-details*retrieve-attribute-based-conditions
    (<cond> ^name <name>
            ^return-type number
            ^args <arg1>
-           ^parameter <param1>)
+           ^parameter <param1>
+           ^rtype <rtype1>)
    (<cond2> ^name <name1>
             ^return-type number
             ^args <arg2>
-            ^parameter <param2>)
+            ^parameter <param2>
+            ^rtype <rtype2>)
    (<param1> ^1.param-id <param-value>
              #^2.param-id <param-obj1-id>
              )
@@ -325,16 +343,17 @@ sp {states*apply*get-game-details*retrieve-attribute-based-conditions
             ^obj-desc <obj-desc2>
             ^description <desc>)
    (<obj-desc1> ^1 <cond>
-            ^param-id <param-value>)
+                ^param-id <param-value>
+                ^rtype <rtype1>)
    (<obj-desc2> ^1 <cond2>
-            ^param-id <param-value>)
+                ^param-id <param-value>
+                ^rtype <rtype2>)
    (<desc> #^name <name>
    	       #^article |the |
            ^negative false
            #^prep is
            ^x <param-value>)
 }
-#PR - if it is not name number, then assign one of them negative param-ids
 
 sp {states*apply*get-game-details*retrieve-same-param-id-conditions
    (state <s> ^PR-game-details
@@ -441,9 +460,7 @@ sp {dialog-event*apply*get-game-details*retrieve-verbs
    (<descs> ^verb <verb>)
 }
 
-# one of the examples that requires this is the failure state of tictactoe (the count of the occupied linear location is 3)
-# the occupied linear location is also a condition on the top state. Use this as a way to distinguish from "all locations are covered"
-# because all locations are covered also is considered similarly
+# When arguments are part of verb and are not an argument of another condition
 sp {states*apply*get-game-details*retrieve-one-argument-predicates-for-verb
    (state <s> ^PR-game-details
               ^descriptions <descs>
@@ -466,12 +483,13 @@ sp {states*apply*get-game-details*retrieve-one-argument-predicates-for-verb
            -^2
            -^3)
    (<param> ^1 <first>)
-   (<first> ^param-id <param-id>) # PR - it is not always the first param for eg: adjacent
+   (<first> ^param-id <param-id>
+            ^type <rtype>)
 -->
    (<descs> ^obj-desc <obj-desc>)
    (<obj-desc> ^1 <cond>
                ^param-id <param-id>
-               ^negative <neg>)
+                ^rtype <rtype>)
 }
 
 ######################################
