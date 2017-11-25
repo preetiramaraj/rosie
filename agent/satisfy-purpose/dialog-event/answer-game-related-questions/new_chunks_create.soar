@@ -1,0 +1,103 @@
+sp {chunk*justification-1344*t2091-1
+    :chunk
+    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
+          ^world <n1>)
+    (<a1> ^condition <n3>)
+    (<n3> ^rtype single ^negative true ^type state-pair ^args <a2>
+          ^parameter <p2> ^name <c2> ^result <r3> ^attribute <c4>)
+    (<a2> ^num 2 ^1 <c5> ^2 <c7>)
+    (<c5> -^rtype set ^result <r1>)
+    (<p2> ^num { < 2 <c6> })
+    (<l1> ^game <g1>)
+    (<n1> ^predicates <p1>)
+    (<p1> ^predicate <n2>)
+    (<n2> ^handle <c2>)
+    (<r3> ^set <p3>)
+    (<r1> ^set <r2>)
+    (<r2> ^instance <i1>)
+    (<i1> ^1 <n4>)
+   -{ (<n2> ^instance <instance>)
+      (<instance> ^1 <n4> ^2 <objb>)
+      (<c7> ^result <r*2>)
+      (<r*2> ^set <s*4>)
+      (<s*4> ^instance <i*2>)
+      (<i*2> ^1 <objb>)}
+    -->
+    (<p3> ^instance <i2> +)
+    (<i2> ^1 <n4> +)
+}
+
+sp {chunk*justification-1307*t2085-1
+    :chunk
+    (state <s1> ^list <l1> ^gtype <c2> ^gtype <c1> ^<c2> <a2> ^<c1> <a2>
+          ^world <n1>)
+    (<a2> ^condition <c3>)
+    (<c3> ^rtype single ^name object ^type attribute ^attribute primitive
+          ^args <a3> ^negative <c4> ^parameter <p1> ^result <r1>)
+    (<a3> -^1 <a1>)
+    (<l1> ^game <g1>)
+    (<n1> ^objects <o1>)
+    (<r1> ^set <p2>)
+    (<o1> ^object <n2>)
+    -->
+    (interrupt)
+    (<p2> ^instance <i1> +)
+    (<i1> ^1 <n2> +)
+}
+
+sp {chunk*justification-936*t1460-1
+    :chunk
+    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
+          ^world <n1>)
+    (<a1> ^condition <n6>)
+    (<n6> ^rtype single ^negative false ^type state-pair ^args <a2>
+          ^parameter <p2> ^name <c2> ^result <r5> ^attribute <c4>)
+    (<a2> ^num 2 ^2 <c5> ^1 <c6>)
+    (<p2> ^num 2)
+    (<c5> -^rtype set ^result <r1>)
+    (<c6> -^rtype set ^result <r3>)
+    (<l1> ^game <g1>)
+    (<n1> ^predicates <p1>)
+    (<p1> ^predicate <n2>)
+    (<n2> ^handle <c2> ^instance <n3>)
+    (<n3> ^2 <n4> ^1 <n5>)
+    (<r5> ^set <p3>)
+    (<r3> ^set <r4>)
+    (<r4> ^instance <i2>)
+    (<i2> ^1 <n5>)
+    (<r1> ^set <r2>)
+    (<r2> ^instance <i1>)
+    (<i1> ^1 <n4>)
+    -->
+    (<p3> ^instance <i3> +)
+    (<i3> ^2 <n4> + ^1 <n5> +)
+}
+
+sp {chunk*justification-626*t1454-1
+    :chunk
+    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
+          ^world <n1>)
+    (<a1> ^condition <n3>)
+    (<n3> ^rtype single ^negative true ^type state-pair ^args <a2>
+          ^parameter <p2> ^name <c2> ^result <r5> ^attribute <c4>)
+    (<a2> ^num 2 ^2 <c5> ^1 <c6>)
+    (<p2> ^num 2)
+    (<c5> -^rtype set ^result <r1>)
+    (<c6> -^rtype set ^result <r3>)
+    (<l1> ^game <g1>)
+    (<n1> ^predicates <p1>)
+    (<p1> ^predicate <n2>)
+    (<n2> ^handle <c2>)
+    (<r5> ^set <p3>)
+    (<r3> ^set <r4>)
+    (<r4> ^instance <i2>)
+    (<i2> ^1 <n5>)
+    (<r1> ^set <r2>)
+    (<r2> ^instance <i1>)
+    (<i1> ^1 { <> <n5> <n4> })
+   -{ (<n2> ^instance <instance1>)
+      (<instance1> ^2 <n4> ^1 <n5>)}
+    -->
+    (<p3> ^instance <i3> +)
+    (<i3> ^2 <n4> + ^1 <n5> +)
+}

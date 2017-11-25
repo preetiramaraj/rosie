@@ -7,27 +7,30 @@ sp {dialog-event*agent-game-action-description*propose*get-game-details
               ^set <set>)
    (<set> ^conditions <cond>)
    (<cond> ^structure-type <str>)  
-   -{ (<set> ^conditions {> <cond> <cond2>})}
+   -{(<s> ^set {> <set> <set2>})}
+   -{(<set> ^conditions {> <cond> <cond2>})}
 -->
    (<s> ^operator <o> +)
    (<o> ^name get-game-details
-        ^descriptions <descs>
+        #^descriptions <descs>
         ^PR-game-details <val>)
 }
 
 ###################################################################
 # Apply operator get-game-details
 ###################################################################
-# PR - TODO - consider writing name << resolve-satisfaction-failure dialog-event >>
+
 sp {states*apply*get-game-details*add-descriptions-to-state
    (state <s> ^operator <o>
         	  ^set <set>)
+   (<set> ^handle <handle>)
    (<o> ^name get-game-details
-        ^descriptions <descs>
+        #^descriptions <descs>
         ^PR-game-details <val>)
 -->              
    (<s> ^descriptions <descs>
         ^PR-game-details <val>)
+   (<descs> ^handle <handle>)
 }
 
 sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
@@ -38,7 +41,8 @@ sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
               ^sentence <sentence>
               ^descriptions <descs>)
    (<o> ^name get-game-details
-        ^descriptions <descs>) 
+        #^descriptions <descs>
+   )
 -->
    (<descs> ^sentence <sentence>)
 }
@@ -50,7 +54,9 @@ sp {states*apply*get-game-details*get-single-object-description
               ^descriptions <descs>
               ^set <set>)
    (<o> ^name get-game-details)
-   (<set> ^conditions <cond>)
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          ^conditions <cond>)
    (<cond> ^name <name>
            ^args <args>
            ^negative <neg>
@@ -83,7 +89,9 @@ sp {states*apply*get-game-details*retrieve-PP-predicate
               ^operator <o>
         	  ^set <set>)
    (<o> ^name get-game-details)
-   (<set> ^conditions <cond>)
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          ^conditions <cond>)
    (<cond> ^name <name>
    	   ^args <args>
        ^structure-type <str>
@@ -117,7 +125,9 @@ sp {states*apply*get-game-details*retrieve-PP-predicate*argument-level-condition
               ^operator <o>
               ^set <set>)
    (<o> ^name get-game-details)
-   (<set> -^conditions <cond>)
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          -^conditions <cond>)
    -{(<set> -^conditions.args.<< 1 2 3 >> <cond>)
      (<descs> -^obj-desc.1.args.2 <cond>)}
    (<cond> ^name <name>
@@ -154,7 +164,9 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
               ^operator <o>
         	  ^set <set>)
    (<o> ^name get-game-details)
-   (<set> ^conditions <cond>)
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          ^conditions <cond>)
    (<cond> ^name <name>
    	   ^args <args>
    	   ^parameter <param>
@@ -193,7 +205,9 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-le
               ^operator <o>
               ^set <set>)
    (<o> ^name get-game-details)
-   (<set> -^conditions <cond>)
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          -^conditions <cond>)
    -{(<set> -^conditions.args.<< 1 2 3 >> <cond>)
      (<descs> -^obj-desc.1.args.2 <cond>)}
    (<cond> ^name <name>
@@ -316,7 +330,9 @@ sp {states*apply*get-game-details*retrieve-attribute-based-conditions
               ^operator <o>
        	  	  ^set <set>)
    (<o> ^name get-game-details)
-   (<set> ^conditions <cond>
+   (<descs> ^handle <handle>)
+   (<set> ^handle <handle>
+          ^conditions <cond>
           ^conditions { <cond2> < <cond> })
    (<cond> ^name <name>
            ^return-type number
@@ -451,7 +467,9 @@ sp {dialog-event*apply*get-game-details*retrieve-verbs
               ^verb-structure <verb-struct>
               ^operator <o>)
    (<o> ^name get-game-details)
-   (<verb-struct> ^<arg-num> <verb>)
+   (<descs> ^handle <handle>)
+   (<verb-struct> ^handle <handle>
+                  ^<arg-num> <verb>)
    (<verb> ^verb-name <verb-name>
            ^verb-prep <verb-prep>
            ^1 <param-id1>
@@ -467,11 +485,15 @@ sp {states*apply*get-game-details*retrieve-one-argument-predicates-for-verb
               ^verb-structure <verb-struct>
               ^operator <o>
               ^set <set>)
-   (<verb-struct> ^<arg-num> <verb>)
+   (<descs> ^handle <handle>)
+   (<verb-struct> ^handle <handle>
+                  ^<arg-num> <verb>)
    (<verb> ^<< 1 2 >> <param-id>)
    (<o> ^name get-game-details
-        ^descriptions <descs>)
-   (<set> ^conditions <cond>)
+        #^descriptions <descs>
+        )
+   (<set> ^handle <handle>
+          ^conditions <cond>)
    -{(<set> ^conditions { <> <cond> <cond2> })
      (<cond2> ^args <args>)
      (<args> ^<< 1 2 >> <cond>)}
@@ -504,6 +526,7 @@ sp {states*op-no-change*propose*add-generated-attribute
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
          ^descriptions <descs>
          ^operator.name get-game-details)
+   -{(<s> ^descriptions {> <descs> <descs2>})}
 -->
    (<s> ^operator <o> +)
    (<o> ^name add-generated-attribute)
@@ -550,10 +573,11 @@ sp {dialog-event*propose*complete-answer-get-game-details
               -^concept-seen
               #^status complete # adding to check smem referent
               ^descriptions <descs>)
+   -{(<s> ^descriptions {> <descs> <descs2>})}
 -->
    (<s> ^operator <o> +)
    (<o> ^name complete-answer-get-game-details
-        ^descriptions <descs>
+        #^descriptions <descs>
         ^generated <gen>)   
 }
 
@@ -561,10 +585,11 @@ sp {dialog-event*apply*complete-answer-get-game-details*send-message
    (state <s> ^name dialog-event
               ^PR-game-details
               ^purpose.type <type>
+              ^descriptions <descs>
               ^operator <o>
               ^io.output-link <out>)
    (<o> ^name complete-answer-get-game-details
-        ^descriptions <descs>
+       # ^descriptions <descs>
         ^generated <gen>)
 -->
    (<out> ^send-message <msg>)
@@ -572,7 +597,7 @@ sp {dialog-event*apply*complete-answer-get-game-details*send-message
           ^fields.descriptions <descs>)
    (<descs> ^generated <gen>)
 }
- 
+
 sp {dialog-event*apply*complete-answer-get-game-details*mark*performed
    (state <s> ^name dialog-event
               ^PR-game-details

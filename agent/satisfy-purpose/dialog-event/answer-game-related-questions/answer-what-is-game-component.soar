@@ -60,11 +60,13 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem
    (<q> ^<< type handle >> <value>)
    (<ret> ^from <game>
           ^<< type handle >> <value>
-          ^predicate-structure <set>)
+          ^predicate-structure <set>
+          ^handle <handle>)
 -->
   (<s> ^set <set>
        ^new-set <new-set>
        ^PR-game-details yes)
+  (<set> ^handle <handle>)
   (<cmd> ^query <q> -
          ^depth 15 -)
 }
@@ -77,9 +79,11 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*smem
         ^type <value>
         ^game <game>)
    (<smem> ^result.retrieved <ret>) 
-   (<ret> ^verb-structure <verb-s>)
+   (<ret> ^verb-structure <verb-s>
+          ^handle <handle>)
 -->
   (<s> ^verb-structure <verb-s>)
+  (<verb-s> ^handle <handle>)
 }
 
 # if retrieval fails, look in chunks
@@ -129,11 +133,13 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*get-
    (<o> ^name answer-what-is-game-component
         ^type <value>
         ^game <game>)
-   (<t> ^nlp-set <set>)
+   (<t> ^nlp-set <set>
+        ^handle <handle>)
 -->
    (<s> ^set <set>
         ^new-set <new-set>
        ^PR-game-details yes)
+   (<set> ^handle <handle>)
 }
 
 sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*get-verb-structure-if-exists
@@ -144,9 +150,11 @@ sp {dialog-event*agent-game-description*apply*answer-what-is-game-component*get-
    (<o> ^name answer-what-is-game-component
         ^type <value>
         ^game <game>)
-   (<t>  ^verb-structure <verb-s>)
+   (<t>  ^verb-structure <verb-s>
+        ^handle <handle>)
 -->
    (<s> ^verb-structure <verb-s>)
+   (<verb-s> ^handle <handle>)
 }
 #PR - TODO if chunk also no help say i don't know
 

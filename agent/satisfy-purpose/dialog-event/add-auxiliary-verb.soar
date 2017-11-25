@@ -13,6 +13,7 @@ sp {dialog-event*propose*add-auxiliary-verb-to-obj-desc
               ^generated yes)
    (<descs> ^obj-desc <obj-desc>)
    (<obj-desc> -^aux-verb)
+   -{(<s> ^descriptions {> <descs> <descs2>})}
    -{ (<descs> ^obj-desc { > <obj-desc> <obj-desc-2> })}
 -->
    (<s> ^operator <o> +)
@@ -83,6 +84,21 @@ sp {dialog-event*propose*add-personal-pronoun*input-arg
    (<obj1> ^attribute input-arg)
    (<obj-desc2> ^1 <obj2>)
    (<obj2> -^attribute input-arg)
+-->
+   (<s> ^operator <o> + > =)
+   (<o> ^name add-personal-pronoun)
+}
+
+sp {dialog-event*propose*add-personal-pronoun*set-description
+   (state <s> ^name dialog-event
+              ^purpose.type agent-game-concept-definition
+              ^descriptions <descs>
+              -^combined
+              ^added yes
+              ^generated yes)
+   (<descs> ^description <desc>
+            -^description <desc2> <> <desc>)
+   (<desc> ^type set-description)
 -->
    (<s> ^operator <o> + > =)
    (<o> ^name add-personal-pronoun)

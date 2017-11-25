@@ -51,6 +51,7 @@ sp {answer-can-you-see-game-concepts*apply*resolve-satisfaction-failure
         ^purpose-type <type>
         ^concept-seen <seen>
         ^gtype <gtype>)
+   (<out-cond> ^handle resolve-concept)
 }
 
 #  This rule elaboration is to handle set related errors (when count of matched locations do not match)

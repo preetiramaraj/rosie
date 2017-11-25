@@ -25,11 +25,14 @@ sp {dialog-event*propose*get-predicates-for-pos*args
            
 sp {dialog-event*apply*done-handling-conditions
    (state <s> #^name dialog-event
-              ^set <set>
-              ^new-set <new-set>)
-   -{(<set> ^conditions <cond>)
+              #^set <set>
+              #^new-set <new-set>
+              ^name <name>)
+   -{(<s> ^set <set>)
+     (<set> ^conditions <cond>)
      (<cond> -^POS-retrieved)}
-   -{(<new-set> ^condition <new-cond>)
+   -{(<s> ^new-set <new-set>)
+     (<new-set> ^condition <new-cond>)
      (<new-cond> -^POS-retrieved)}
 -->
     (<s> ^all-structures-retrieved true)
@@ -187,7 +190,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieve-handle-LTI*noun
               ^PR-game-details)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
-   (<cond> ^name << boat1 block object color value husband location count missionary1 cannibal1 bank1 number woman1 man1 husband last-name garbage >>  
+   (<cond> ^name << row column section boat1 block object color value husband location count missionary1 cannibal1 bank1 number woman1 man1 husband last-name garbage >>  
            ^args <args>)
 -->
    (<cond> ^structure-type N)
@@ -199,7 +202,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieve-handle-LTI*adjective
               ^PR-game-details)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
-   (<cond> ^name << linear yellow1 blue1 purple1 red1 green1 captured free occupied matched matched171 covered clear small1 medium1 large1 destination1 current opposite >>
+   (<cond> ^name << empty filled linear yellow1 blue1 purple1 red1 green1 captured free occupied matched matched171 covered clear small1 medium1 large1 destination1 current opposite >>
            ^args <args>)
 -->
    (<cond> ^structure-type ADJ)

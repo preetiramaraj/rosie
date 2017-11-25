@@ -603,7 +603,6 @@ sp {chunk-multi*chunk-predicate-impasse*apply*complete*failure*snc*t48190-1
            ^rtype single +)
     (<r8> ^set <p27> +)
     (<p28> ^num 0 +)
-    # PR - Change the bottom to ^1 <c1> for failure of jealous-husbands to work
     (<a7> ^2 <c1> + ^num 1 +)
     (<c2> ^type attribute + ^name bank1 + ^attribute shape + ^result <r9> +
            ^parameter <p30> + ^negative false + ^args <a10> + ^rtype single +)
@@ -1222,9 +1221,6 @@ sp {chunk-multi*chunk-predicate-impasse*apply*complete*action*snc*t40740-1
            ^result <r6> + ^parameter <p14> + ^negative false + ^args <a1> +
            ^rtype single +)
     (<r6> ^set <r5> +)
-    (<r5> ^instance <i1> + ^instance <i2> + ^instance <i3> + ^instance <i4> +
-           ^instance <i5> + ^instance <i6> + ^instance <i7> + ^instance <i8> +
-           ^instance <i9> +)
     (<p14> ^num 0 +)
     (<n2> ^type attribute-of + ^name color + ^result <r7> + ^parameter <p18> +
            ^negative false + ^args <a10> + ^rtype single +
@@ -1254,9 +1250,6 @@ sp {chunk-multi*chunk-predicate-impasse*apply*complete*action*snc*t40740-1
            ^result <r12> + ^parameter <p26> + ^negative false + ^args <a6> +
            ^rtype single +)
     (<r12> ^set <r11> +)
-    (<r11> ^instance <i10> + ^instance <i11> + ^instance <i12> +
-           ^instance <i13> + ^instance <i14> + ^instance <i15> +
-           ^instance <i16> + ^instance <i17> + ^instance <i18> +)
     (<p26> ^num 0 +)
     (<c9> ^type attribute + ^name garbage + ^attribute name + ^result <r13> +
            ^parameter <p29> + ^negative false + ^args <a12> + ^rtype single +)
@@ -1780,7 +1773,8 @@ sp {chunk-multi*chunk-predicate-impasse*apply*complete*failure*snc*t33082-1
            ^primary-rtype single + ^nlp-set <p4> + ^aname failure-default208 +
            ^handle failure-default208 +)
     (<p3> ^argnum 5 +)
-    (<p4> ^conditions <n1> + ^conditions <n2> + ^conditions <n3> +
+    (<p4> ^conditions <n1> + ^conditions <n2> + 
+^conditions <n3> +
            ^conditions <n4> + ^conditions <n5> + ^aname failure-default208 +)
     (<n3> ^type function + ^name count + ^result <r2> + ^parameter <p11> +
            ^negative false + ^args <a4> + ^rtype single +
@@ -3384,7 +3378,7 @@ sp {chunk-multi*chunk-game-impasse*apply*complete*snc*t9096-3
 }
 
 sp {chunk-multi*chunk-game-impasse*apply*complete*snc*t9096-2
-    :chunk
+   :chunk
     (state <s1> ^retrieve-game goose-fox-beans55)
     -->
     (<s1> ^retrieve-handle failure-default91 +)
@@ -4429,107 +4423,4 @@ sp {chunk*chunk-predicate-impasse*apply*complete*OpNoChange*t1724-1
     (<i10> ^type single ^param-id 3)
     (<a5> ^num 2 ^2 <c3> ^1 <c2>)
     (<r5> ^set <s6>)
-}
-
-sp {chunk*justification-1344*t2091-1
-    :chunk
-    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
-          ^world <n1>)
-    (<a1> ^condition <n3>)
-    (<n3> ^rtype single ^negative true ^type state-pair ^args <a2>
-          ^parameter <p2> ^name <c2> ^result <r3> ^attribute <c4>)
-    (<a2> ^num 2 ^1 <c5> ^2 <c7>)
-    (<c5> -^rtype set ^result <r1>)
-    (<p2> ^num { < 2 <c6> })
-    (<l1> ^game <g1>)
-    (<n1> ^predicates <p1>)
-    (<p1> ^predicate <n2>)
-    (<n2> ^handle <c2>)
-    (<r3> ^set <p3>)
-    (<r1> ^set <r2>)
-    (<r2> ^instance <i1>)
-    (<i1> ^1 <n4>)
-   -{ (<n2> ^instance <instance>)
-      (<instance> ^1 <n4> ^2 <objb>)
-      (<c7> ^result <r*2>)
-      (<r*2> ^set <s*4>)
-      (<s*4> ^instance <i*2>)
-      (<i*2> ^1 <objb>)}
-    -->
-    (<p3> ^instance <i2> +)
-    (<i2> ^1 <n4> +)
-}
-
-sp {chunk*justification-1307*t2085-1
-    :chunk
-    (state <s1> ^list <l1> ^gtype <c2> ^gtype <c1> ^<c2> <a2> ^<c1> <a2>
-          ^world <n1>)
-    (<a2> ^condition <c3>)
-    (<c3> ^rtype single ^name object ^type attribute ^attribute primitive
-          ^args <a3> ^negative <c4> ^parameter <p1> ^result <r1>)
-    (<a3> -^1 <a1>)
-    (<l1> ^game <g1>)
-    (<n1> ^objects <o1>)
-    (<r1> ^set <p2>)
-    (<o1> ^object <n2>)
-    -->
-    (<p2> ^instance <i1> +)
-    (<i1> ^1 <n2> +)
-}
-
-sp {chunk*justification-936*t1460-1
-    :chunk
-    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
-          ^world <n1>)
-    (<a1> ^condition <n6>)
-    (<n6> ^rtype single ^negative false ^type state-pair ^args <a2>
-          ^parameter <p2> ^name <c2> ^result <r5> ^attribute <c4>)
-    (<a2> ^num 2 ^2 <c5> ^1 <c6>)
-    (<p2> ^num 2)
-    (<c5> -^rtype set ^result <r1>)
-    (<c6> -^rtype set ^result <r3>)
-    (<l1> ^game <g1>)
-    (<n1> ^predicates <p1>)
-    (<p1> ^predicate <n2>)
-    (<n2> ^handle <c2> ^instance <n3>)
-    (<n3> ^2 <n4> ^1 <n5>)
-    (<r5> ^set <p3>)
-    (<r3> ^set <r4>)
-    (<r4> ^instance <i2>)
-    (<i2> ^1 <n5>)
-    (<r1> ^set <r2>)
-    (<r2> ^instance <i1>)
-    (<i1> ^1 <n4>)
-    -->
-    (<p3> ^instance <i3> +)
-    (<i3> ^2 <n4> + ^1 <n5> +)
-}
-
-sp {chunk*justification-626*t1454-1
-    :chunk
-    (state <s1> ^list <l1> ^gtype <c3> ^gtype <c1> ^<c3> <a1> ^<c1> <a1>
-          ^world <n1>)
-    (<a1> ^condition <n3>)
-    (<n3> ^rtype single ^negative true ^type state-pair ^args <a2>
-          ^parameter <p2> ^name <c2> ^result <r5> ^attribute <c4>)
-    (<a2> ^num 2 ^2 <c5> ^1 <c6>)
-    (<p2> ^num 2)
-    (<c5> -^rtype set ^result <r1>)
-    (<c6> -^rtype set ^result <r3>)
-    (<l1> ^game <g1>)
-    (<n1> ^predicates <p1>)
-    (<p1> ^predicate <n2>)
-    (<n2> ^handle <c2>)
-    (<r5> ^set <p3>)
-    (<r3> ^set <r4>)
-    (<r4> ^instance <i2>)
-    (<i2> ^1 <n5>)
-    (<r1> ^set <r2>)
-    (<r2> ^instance <i1>)
-    (<i1> ^1 { <> <n5> <n4> })
-   -{ (<n2> ^instance <instance1>)
-      (<instance1> ^2 <n4> ^1 <n5>)}
-    -->
-    (<p3> ^instance <i3> +)
-    (<i3> ^2 <n4> + ^1 <n5> +)
 }
