@@ -27,7 +27,7 @@ sp {dialog-event*apply*done-handling-conditions
    (state <s> #^name dialog-event
               #^set <set>
               #^new-set <new-set>
-              ^name <name>)
+              ^name << dialog-event resolve-satisfaction-failure >>)
    -{(<s> ^set <set>)
      (<set> ^conditions <cond>)
      (<cond> -^POS-retrieved)}

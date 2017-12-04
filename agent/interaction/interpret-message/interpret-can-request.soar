@@ -34,20 +34,32 @@ sp {interpret-message*elaborate*interpret-can-request*get-details-of-action-from
    (<action> ^handle <handle>)
 -->
    (<o> ^action-handle <handle>
-        ^object <arg1>)
+        ^arg1 <arg1>)
+}
+
+sp {interpret-message*elaborate*interpret-can-request*add-second-argument-if-exists
+   (state <s> ^name interpret-message
+              ^operator <o> +)
+   (<o> ^name interpret-can-request
+        ^message <msg>)
+   (<msg> ^arg2 <arg2>)
+-->
+   (<o> ^arg2 <arg2>)
 }
 
 #####
 # OPERATOR APPLICATION
 #####
 
-sp {interpret-message*apply*interpret-can-request
+sp {interpret-message*apply*interpret-can-request*only-one-arg
    (state <s> ^name interpret-message
               ^operator <o>)
    (<o> ^name interpret-can-request
         ^message <msg>
         ^action-handle <handle>
-        ^object <arg1>)
+        ^arg1 <arg1>
+        -^arg2
+        )
 -->
    (<s> ^new-segment-info <info>
         ^mark-interpreted <msg>)
@@ -57,7 +69,31 @@ sp {interpret-message*apply*interpret-can-request
            ^parameters <params>
         ^satisfaction <sat>)
    (<params> ^action-handle <handle>
-             ^object <arg1>)
+             ^arg1 <arg1>)
+   (<sat> ^dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}
+
+sp {interpret-message*apply*interpret-can-request*two-args
+   (state <s> ^name interpret-message
+              ^operator <o>)
+   (<o> ^name interpret-can-request
+        ^message <msg>
+        ^action-handle <handle>
+        ^arg1 <arg1>
+        ^arg2 <arg2>)
+-->
+   (<s> ^new-segment-info <info>
+        ^mark-interpreted <msg>)
+   (<info> ^purpose <p>
+           ^originator instructor)
+   (<p> ^type agent-can-you-do-response
+           ^parameters <params>
+        ^satisfaction <sat>)
+   (<params> ^action-handle <handle>
+             ^arg1 <arg1>
+             ^arg2 <arg2>)
    (<sat> ^dialog-event <de>)
    (<de> ^type explanation
          ^originator agent)

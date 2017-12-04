@@ -1,0 +1,103 @@
+# In order to set up for already learned game
+sp {finished-game-teaching*game*remove-existing-dialogue-context
+   (state <s> ^superstate.operator <sop>
+              ^top-state <ts>)
+   (<ts> ^dialogue-context <dc>)
+   (<dc> ^game-handle { <name1> <> <name> })
+   (<sop> -^type replay-game 
+           ^multiplayer <multi> 
+           ^game-name <name>)
+-->
+   (<ts> ^dialogue-context <dc> -)
+}
+
+sp {finished-game-teaching*set-context*game
+   (state <s> ^superstate.operator <sop>
+              ^top-state <ts>)
+   (<ts> -^dialogue-context.game-handle)
+   (<sop> -^type replay-game 
+           ^multiplayer <multi> 
+           ^game-name <name>)
+-->
+   (<ts> ^dialogue-context <dc>)
+   (<dc> ^game-handle <name>)
+}
+
+# Begin new dialog-event for can-request questions
+sp {dialog-event*propose*answer-can-request*game-event
+   (state <s> ^name dialog-event
+              ^purpose <p>
+              ^top-state.dialogue-context.game-handle <game>)   
+   (<p> ^type agent-can-you-do-response
+           ^parameters <params>
+        ^satisfaction <sat>)
+   (<params> ^action-handle <handle>
+             ^arg1 <arg1>
+             ^arg2 <arg2>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name answer-can-request
+        ^handle <handle>
+        ^arg1 <arg1>
+        ^arg2 <arg2>
+        ^game <game>)
+}
+
+sp {dialog-event*apply*answer-can-request*game-event
+   (state <s> ^name dialog-event
+              ^operator <o>)
+   (<o> ^name answer-can-request
+        ^handle <handle>
+        ^arg1 <arg1>
+        ^arg2 <arg2>
+        ^game <game>)
+-->
+   (<s> ^detect-game-concepts <game>
+        ^gtype action)
+}
+
+#################################################
+# Checking if action possible
+#################################################
+sp {operator*impasse*no-change*propose*identify-if-action-possible*game
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^impasse no-change)
+   (<ss> ^name dialog-event
+         ^operator <o2> +)
+   (<o2> ^name answer-can-request
+         ^handle <handle>
+         ^arg1 <arg1>
+         ^arg2 <arg2phrase>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name identify-if-action-possible)
+}
+
+sp {operator*impasse*no-change*apply*identify-if-action-possible*game
+   (state <s> ^superstate <ss>
+              ^attribute operator
+              ^operator <o>
+              ^impasse no-change)
+   (<o> ^name identify-if-action-possible)
+   (<ss> ^name dialog-event
+         ^operator <o1> +
+         ^operator <o2> +)
+   (<o1> ^verb-structure <verb>
+         ^parameters <params>)
+   (<verb> ^<num> <action>)
+   (<action> ^verb-name <handle>
+             ^verb-prep <prep>
+             ^1 <num1>
+             ^2 <num2>)
+   (<params> ^<num1>.handle <arg1>
+             ^<num2>.handle <arg2>)
+   (<o2> ^name answer-can-request
+         ^handle <handle>
+         ^arg1.handle <arg1>
+         ^arg2 <arg2phrase>)
+   (<arg2phrase> ^handle <prep>
+                 ^2.handle <arg2>)
+-->
+   (<ss> ^action-possible Yes)
+}
