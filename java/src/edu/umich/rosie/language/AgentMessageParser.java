@@ -71,7 +71,7 @@ public class AgentMessageParser
 			simpleMessages.put("setup-goal", "Please setup the goal state.");
 			simpleMessages.put("tell-me-go", "Ok, tell me when to go.");
 			simpleMessages.put("setup-failure", "Please setup the failure condition.");
-			simpleMessages.put("define-actions", "Can you describe the legal actions?");
+			simpleMessages.put("define-actions", "Can you describe the actions, goal states and failure conditions?");
 			simpleMessages.put("describe-action", "What are the conditions of the action.");
 			simpleMessages.put("describe-goal", "Please describe or demonstrate the goal.");
 			simpleMessages.put("describe-failure", "Please describe the failure condition.");
@@ -82,6 +82,8 @@ public class AgentMessageParser
 			simpleMessages.put("already-learned-goal", "I know that goal.");
 			simpleMessages.put("already-learned-action", "I know that action.");
 			simpleMessages.put("already-learned-failure", "I know that failure condition.");
+			simpleMessages.put("replay-question", "Would you like to replay the game/puzzle?");
+			simpleMessages.put("gotit", "I've found a solution.");
 		}
 		
 		String type = SoarUtil.getValueOfAttribute(id, "type");
@@ -206,7 +208,7 @@ public class AgentMessageParser
                }
                String type = SoarUtil.getValueOfAttribute(fieldsId, "type");
     	       if ((type != null) && type.equalsIgnoreCase("puzzle")) {
-         		result += ". Should I try to solve the puzzle?";
+         		result += ". Please setup the initial state so that I can try and solve the puzzle.";
                }
     	       else {
 	    		result += ". Shall we play a game?";
