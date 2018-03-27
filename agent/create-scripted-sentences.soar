@@ -23,8 +23,8 @@ sp {apply*wait-for-response*stop*max-sentence
           ^io.output-link <io>
          ^current-sentence-number > <csn>)
 -->
-   (<io> ^stop-java <sj>)
-   (<sj> ^stop-java stop-java)
+#   (<io> ^stop-java <sj>)
+#   (<sj> ^stop-java stop-java)
    (write (cmd |ctf stats.txt stats|))
    (write (cmd |ctf statsm.txt statsm|))
 #  (write (cmd |ctf allsmem.txt print @|))
@@ -45,7 +45,7 @@ sp {apply*wait-for-response*stop*max-sentence*halt
    (<io> ^stop-java <sj>)
    (<sj> ^stop-java stop-java)
 -->
-   (halt)
+  # (halt)
 }
 
 sp {apply*wait-for-response*add*next-sentence-number

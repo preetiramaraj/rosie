@@ -23,7 +23,7 @@ sp {interaction*apply*interpret-message*interrupt
              ^top-state.agent-params.debug-interaction true
              ^top-state.agent-params.enable-interrupts true)
 -->
-  (interrupt)
+  #(interrupt)
 }
 
 ####################################################
