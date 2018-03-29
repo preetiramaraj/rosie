@@ -1,0 +1,160 @@
+# Here you can put any special smem add commands you want the agent to load
+smem --add {
+
+(@on1 ^relation <501000x> <501000y> <501000z> )
+   (<501000x> ^avg 0.0 ^axis x ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501000y> ^avg 0.0 ^axis y ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501000z> ^avg 0.005 ^axis z ^bottom 0.00001 ^count 3 ^squaredsum 0.0 ^sum 0.0 ^top 0.04 ^type greater )
+
+(@in1 ^relation <501001x> <501001y> <501001z> )
+   (<501001x> ^avg 0.0 ^axis x ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501001y> ^avg 0.0 ^axis y ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501001z> ^avg 0.005 ^axis z ^bottom 0.00001 ^count 3 ^squaredsum 0.0 ^sum 0.0 ^top 0.04 ^type greater )
+
+(@right-of1 ^relation <501002x> <501002y> <501002z>)
+   (<501002x> ^avg 0.0 ^axis x ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501002y> ^avg 0.1 ^axis y ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.4 ^type greater )
+   (<501002z> ^avg 0.0 ^axis z ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+
+(@left-of1 ^relation <501003x> <501003y> <501003z>)
+   (<501003x> ^avg 0.0 ^axis x ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501003y> ^avg 0.1 ^axis y ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.4 ^type less )
+   (<501003z> ^avg 0.0 ^axis z ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+
+(@below1 ^relation <501005x> <501005y> <501005z> )
+   (<501005x> ^avg 0.0 ^axis x ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501005y> ^avg 0.0 ^axis y ^bottom 0.0 ^count 0 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+   (<501005z> ^avg 0.005 ^axis z ^bottom 0.000001 ^count 3 ^squaredsum 0.0 ^sum 0.0 ^top 0.04 ^type less)
+
+(@near1 ^relation <501011x> <501011y> <501011z>)
+   (<501011x> ^avg 0.1 ^axis x ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.1 ^type aligned greater less)
+   (<501011y> ^avg 0.1 ^axis y ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.1 ^type less greater aligned)
+   (<501011z> ^avg 0.1 ^axis z ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+
+(@diagonal-with1 ^relation <501012x> <501012y> <501012z>)
+   (<501012x> ^avg 0.1 ^axis x ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.1 ^type greater less)
+   (<501012y> ^avg 0.1 ^axis y ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.1 ^type less greater)
+   (<501012z> ^avg 0.1 ^axis z ^bottom 0.0001 ^count 1 ^squaredsum 0.0 ^sum 0.0 ^top 0.0 ^type aligned )
+
+}
+
+smem --add {
+           (<mac1> ^spelling |missionaries-and-cannibals|		
+                   ^structure-type N		
+                   ^number singular 		
+                   ^object-feature handle 		
+                   ^referent <mac1-name>)		
+           (<mac1-name> ^handle missionaries-and-cannibals190 		
+                        ^property @concept 		
+                        ^word-structure <mac1>)
+	           
+#           (<tower1> ^spelling |tower-of-hanoi-3|
+#                   ^structure-type N
+#                   ^number singular 
+#                   ^object-feature handle 
+#                   ^referent <tower1-name>)
+#           (<tower1-name> ^handle tower-of-hanoi-31 
+#                        ^property @concept 
+#                        ^word-structure <tower1>)
+           
+           (<gfb1> ^spelling |goose-fox-beans|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <gfb1-name>)
+           (<gfb1-name> ^handle goose-fox-beans55
+                        ^property @concept 
+                        ^word-structure <gfb1>)
+                      
+           (<five-puzzle1> ^spelling |five-puzzle|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <five-puzzle1-name>)
+           (<five-puzzle1-name> ^handle five-puzzle1
+                        ^property @concept 
+                        ^word-structure <five-puzzle1>)
+                     
+           (<eight-puzzle1> ^spelling |eight-puzzle|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <eight-puzzle1-name>)
+           (<eight-puzzle1-name> ^handle eight-puzzle221
+                        ^property @concept 
+                        ^word-structure <eight-puzzle1>)
+                      
+           (<othello1> ^spelling |othello|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <othello1-name>)
+           (<othello1-name> ^handle othello291
+                        ^property @concept 
+                        ^word-structure <othello1>)
+ 
+           (<husbands1> ^spelling |jealous-husbands|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <husbands1-name>)
+           (<husbands1-name> ^handle jealous-husbands273
+                        ^property @concept 
+                        ^word-structure <husbands1>)
+                      
+           (<tictactoe1> ^spelling |tic-tac-toe|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <tictactoe1-name>)
+           (<tictactoe1-name> ^handle tic-tac-toe95
+                        ^property @concept 
+                        ^word-structure <tictactoe1>)
+                      
+           (<three-mens-morris1> ^spelling |three-mens-morris|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <three-mens-morris1-name>)
+           (<three-mens-morris1-name> ^handle three-mens-morris150
+                        ^property @concept 
+                        ^word-structure <three-mens-morris1>)
+                      
+#           (<frogs-and-toads1> ^spelling |frogs-and-toads|
+#                   ^structure-type N
+#                   ^number singular 
+#                   ^object-feature handle 
+#                   ^referent <frogs-and-toads1-name>)
+#           (<frogs-and-toads1-name> ^handle frogs-and-toads245
+#                        ^property @concept 
+#                        ^word-structure <frogs-and-toads1>)
+
+           (<iso-five-puzzle1> ^spelling |iso-five-puzzle| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <iso-five-puzzle1-name>) 
+	   (<iso-five-puzzle1-name> ^handle iso-five-puzzle166  
+			^property @concept   
+			^word-structure <iso-five-puzzle1>)
+
+           (<mahjong1> ^spelling |mahjong| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <mahjong1-name>) 
+	   (<mahjong1-name> ^handle mahjong237  
+			^property @concept   
+			^word-structure <mahjong1>)
+
+           (<risk1> ^spelling |risk| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <risk1-name>) 
+	   (<risk1-name> ^handle risk140  
+			^property @concept   
+			^word-structure <risk1>)
+
+
+}
