@@ -164,7 +164,7 @@ smem --add {
 
     ## DESCRIBE
           (<describe> ^spelling |describe|
-                      ^referent @101017
+                      ^referent @describe1
                       ^super-type @60996)
                
     ## Point

@@ -8,7 +8,15 @@ sp {action-space*execute*elaborate*problem-space*world*copy-type
 -->
    (<world> ^copy-type shallow)
 }
-            
+ 
+sp {action-space*execute*elaborate*problem-space*execution-type*internal
+   (state <s> ^problem-space <ps>
+              ^current-action.describe-action yes)
+   (<ps> ^name action
+         ^action-space execute)
+-->
+   (<ps> ^execution-type internal)
+}           
 ## For a composite action, propose action operators if there is a desired structure (goal) 
 ##   with at least 1 predicate
 #sp {action*problem-space*execute*composite*elaborate*problem-space*propose-action-operators

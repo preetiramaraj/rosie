@@ -252,7 +252,7 @@ smem --add {
     ## DESCRIBE
           (<describe> ^spelling |describe|
                       ^referent @describe1
-                      ^super-type @60996)                        
+                      ^super-type @60997)                        
                               
 
     ## Attach

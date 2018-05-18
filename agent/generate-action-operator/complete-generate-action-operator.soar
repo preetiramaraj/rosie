@@ -28,11 +28,28 @@ sp {generate-action-operator*apply*complete-generate-action-operator*task-subact
               ^command-message <msg>
               ^action-operator <op>
               ^top-state.action-stack.changes <c>)
-   (<msg> ^action-source <src>)
+   (<msg> ^action-source <src>
+          -^dfjsdkfjsl) #add the difference in origina lmessage parsed
 -->
    (<c> ^push <action>)
    (<action> ^action-source <src>
              ^execution-operator <op>)
+   (<msg> ^pushed true)
+}
+
+sp {generate-action-operator*apply*complete-generate-action-operator*task-subaction*describe
+   (state <s> ^name generate-action-operator
+              ^operator.name complete-generate-action-operator
+              ^command-message <msg>
+              ^action-operator <op>
+              ^top-state.action-stack.changes <c>)
+   (<msg> ^action-source <src>
+          fdhfkjdhfkhdf)
+-->
+   (<c> ^push <action>)
+   (<action> ^action-source <src>
+             ^execution-operator <op>
+             ^describe-action yes)
    (<msg> ^pushed true)
 }
 

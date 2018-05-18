@@ -1,6 +1,7 @@
 # execute-action problem-space
 sp {execute-action*elaborate*problem-space
-   (state <s> ^name execute-action)
+   (state <s> ^name execute-action
+              -^child-action.describe-action yes)
 -->
    (<s> ^problem-space <ps>)
    (<ps> ^name action
@@ -9,5 +10,19 @@ sp {execute-action*elaborate*problem-space
          ^world <world>
          ^learning <learn>)
    (<world> ^copy-type shallow)
+   (<learn> ^type exploration)
+}
+
+sp {execute-action*elaborate*problem-space*describe-action
+   (state <s> ^name execute-action
+              ^child-action.describe-action yes)
+-->
+   (<s> ^problem-space <ps>)
+   (<ps> ^name action
+         ^action-space execute
+         #^execution-type external
+         ^world <world>
+         ^learning <learn>)
+   (<world> ^copy-type deep)
    (<learn> ^type exploration)
 }
