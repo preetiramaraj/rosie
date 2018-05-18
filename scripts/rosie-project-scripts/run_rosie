@@ -1,0 +1,48 @@
+#!/bin/bash
+
+source ~/.bashrc 
+
+AGENT_NAME=""
+export PROBCOG_HOME=$ROSIE_PROJ/probcog
+
+# Run in background
+BG="FALSE"
+
+# Iterate over each argument given
+while [[ $# -gt 0 ]]
+do
+	arg="$1"
+	case $arg in
+		-t|--tabletop)
+			export PROBCOG_HOME=$ROSIE_PROJ/tabletop
+			;;
+		-f|--fetch)
+			export PROBCOG_HOME=$ROSIE_PROJ/fetch
+			;;
+		-m|--magicbot)
+			export PROBCOG_HOME=$ROSIE_PROJ/probcog
+			;;
+		-b|--background)
+			BG="TRUE"
+			;;
+		*)
+			AGENT_NAME="$1"
+			;;
+	esac
+	shift
+done
+
+if [ "$AGENT_NAME" == "" ]; then 
+	echo "Missing agent name"
+	exit 1
+fi
+
+export CLASSPATH=$CLASSPATH:$PROBCOG_HOME/java/probcog.jar
+echo $CLASSPATH
+
+cd $ROSIE_HOME/test-agents/$AGENT_NAME/agent
+if [ "$BG" == "TRUE" ]; then
+	java probcog.rosie.RosieGUI -c rosie.$AGENT_NAME.config &
+else
+	java probcog.rosie.RosieGUI -c rosie.$AGENT_NAME.config
+fi
