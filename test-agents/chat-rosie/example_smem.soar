@@ -1,4 +1,5 @@
 # Here you can put any special smem add commands you want the agent to load
+
 smem --add {
            (<mac1> ^spelling |missionaries-and-cannibals|		
                    ^structure-type N		
@@ -14,7 +15,7 @@ smem --add {
                    ^number singular 
                    ^object-feature handle 
                    ^referent <tower1-name>)
-           (<tower1-name> ^handle tower-of-hanoi-3123 
+           (<tower1-name> ^handle tower-of-hanoi-31 
                         ^property @concept 
                         ^word-structure <tower1>)
            
@@ -35,7 +36,7 @@ smem --add {
            (<five-puzzle1-name> ^handle five-puzzle1
                         ^property @concept 
                         ^word-structure <five-puzzle1>)
-                      
+                     
            (<eight-puzzle1> ^spelling |eight-puzzle|
                    ^structure-type N
                    ^number singular 
@@ -71,5 +72,51 @@ smem --add {
            (<tictactoe1-name> ^handle tic-tac-toe95
                         ^property @concept 
                         ^word-structure <tictactoe1>)
-}
+                      
+           (<three-mens-morris1> ^spelling |three-mens-morris|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <three-mens-morris1-name>)
+           (<three-mens-morris1-name> ^handle three-mens-morris150
+                        ^property @concept 
+                        ^word-structure <three-mens-morris1>)
+                      
+           (<frogs-and-toads1> ^spelling |frogs-and-toads|
+                   ^structure-type N
+                   ^number singular 
+                   ^object-feature handle 
+                   ^referent <frogs-and-toads1-name>)
+           (<frogs-and-toads1-name> ^handle frogs-and-toads245
+                        ^property @concept 
+                        ^word-structure <frogs-and-toads1>)
 
+           (<iso-five-puzzle1> ^spelling |iso-five-puzzle| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <iso-five-puzzle1-name>) 
+	   (<iso-five-puzzle1-name> ^handle iso-five-puzzle166  
+			^property @concept   
+			^word-structure <iso-five-puzzle1>)
+
+           (<mahjong1> ^spelling |mahjong| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <mahjong1-name>) 
+	   (<mahjong1-name> ^handle mahjong237  
+			^property @concept   
+			^word-structure <mahjong1>)
+
+           (<risk1> ^spelling |risk| 
+				^structure-type N 
+				^number singular  
+				^object-feature handle   
+				^referent <risk1-name>) 
+	   (<risk1-name> ^handle risk140  
+			^property @concept   
+			^word-structure <risk1>)
+
+
+}

@@ -285,6 +285,6 @@ public class ChatPanel extends JPanel implements IMessagePasser.IMessageListener
     	}
     	history.add(msg);
     	historyIndex = history.size();
-    	messageLogger.sendMessage(msg, MessageType.INSTRUCTOR_MESSAGE);
+    	messageLogger.sendMessage(msg, MessageType.INSTRUCTOR_MESSAGE); // Make this agent message on the laptop
     }
 }

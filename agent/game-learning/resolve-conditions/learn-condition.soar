@@ -211,30 +211,30 @@ sp {retry-condition-setup*apply*complete
 
 #TODO ADD BACK FOR ISOMORPHIC DETECTION
 #JK version
-sp {learn-condition*propose*auto-resolve-satisfaction-failure
-   (state <s> ^operator.name wait
-              ^impasse no-change
-              ^superstate.superstate <sss>)
-   (<sss> ^name learn-condition)
--->
-#(interrupt)
-#(write (cmd print <sss> -d 6))
-(<sss> ^operator <o> + >)
-(<o> ^name auto-resolve-satisfaction-failure)
-}
-
-# PR - my version
-#sp {learn-condition*propose*resolve-satisfaction-failure
+#sp {learn-condition*propose*auto-resolve-satisfaction-failure
 #   (state <s> ^operator.name wait
 #              ^impasse no-change
 #              ^superstate.superstate <sss>)
 #   (<sss> ^name learn-condition)
 #-->
-##(interrupt)
+###(interrupt)
 ##(write (cmd print <sss> -d 6))
 #(<sss> ^operator <o> + >)
-#(<o> ^name resolve-satisfaction-failure)
+#(<o> ^name auto-resolve-satisfaction-failure)
 #}
+
+# PR - my version
+sp {learn-condition*propose*resolve-satisfaction-failure
+   (state <s> ^operator.name wait
+              ^impasse no-change
+              ^superstate.superstate <sss>)
+   (<sss> ^name learn-condition)
+-->
+(interrupt)
+#(write (cmd print <sss> -d 6))
+(<sss> ^operator <o> + >)
+(<o> ^name resolve-satisfaction-failure)
+}
 
 
 sp {learn-condition*apply*resolve-satisfaction-failure
@@ -243,7 +243,9 @@ sp {learn-condition*apply*resolve-satisfaction-failure
           ^operator.name resolve-satisfaction-failure)
 -->
    (<s> ^unresolved-conditions <cos>
-        ^set <out-cond>)
+        ^set <out-cond>
+        ^PR-game-details yes)
+   (<out-cond> ^handle resolve-concept)
 }
 
 sp {resolve-satisfaction-failure*elaborate*unresolved
@@ -306,6 +308,8 @@ sp {resolve-satisfaction-failure*apply*add-condition-without-subconditions
    (<cos> ^condition <co1>)
    (<co1> -^added yes)
 -->
+   (<s> ^PR-game-details yes
+        ^new-set <new-set>)
    (<out-cond> ^conditions <co1>)
 }
 
@@ -363,13 +367,14 @@ sp {dialog-event*elaborate*resolve-satisfaction-failure*select-nlp
    (<o> ^name resolve-satisfaction-failure)
    (<ss> ^<gtype>.nlp-set <nlp-set>
          ^gtype { <> |predicate| <gtype> }
-         ^set <set>)
+         ^set <set>
+         ) # PR - TODO not sure about this set here
    (<set> ^<gtype>)
    (<nlp-set> ^<< nlp conditions >> <condition>)
    (<condition> #PR - TODO consider doing this with parameter instead of args
                 ^args <args1>
                 ^arg-count <argcount>)
-   -{(<nlp-set> ^nlp { <condition2> <> <condition1> })
+   -{(<nlp-set> ^<< nlp conditions >> { <condition2> <> <condition1> })
      (<condition2> ^arg-count { > <argcount> <argcount2> })}
 -->
     (<o> ^nlp <condition>
@@ -395,8 +400,11 @@ sp {resolve-conditions*apply*resolve-satisfaction-failure*neg-pair
    (<negpair> ^<paramid1> { <num1> <> <num> } #num1 is what it should have been #PR - confirm with james
               ^<paramid2> <cset>)
 -->
-   (<s> ^set <set>)
-   (<set> ^conditions <cond>)
+   (<s> ^set <set>
+        ^new-set <new-set>
+        ^PR-game-details yes)
+   (<set> ^conditions <cond>
+          ^handle resolve-concept)
 }
 # PR - end my  version
 

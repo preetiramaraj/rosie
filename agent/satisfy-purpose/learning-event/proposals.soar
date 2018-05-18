@@ -314,7 +314,7 @@ sp {learning-event*propose*finished-game-teaching*retrieval
    (<o> ^name finished-game-teaching
         ^multiplayer <mult>
         ^game-name <name>
-        #^type replay-game # PR - TODO Commenting this line out for now. Must use another condition in learning event to prevent this from happening.
+        ^type replay-game # PR - TODO Commenting this line out for now. Must use another condition in learning event to prevent this from happening.
         )
 }
 

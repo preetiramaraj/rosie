@@ -13,5 +13,10 @@ source game-related-preferences.soar
 # Source file answer-get-part-of-speech.soar
 source answer-get-part-of-speech.soar
 
+# Source answer-can-question-game.soar
+source answer-can-question-game.soar
+
 # Source file game_chunks.soar - chunks for game concepts
 #source game_chunks.soar
+
+source new_chunks_create.soar

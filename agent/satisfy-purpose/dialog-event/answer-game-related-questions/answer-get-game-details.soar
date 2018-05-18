@@ -525,7 +525,7 @@ sp {states*op-no-change*propose*add-generated-attribute
               ^impasse no-change)
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
          ^descriptions <descs>
-         ^operator.name get-game-details)
+         ^operator.name get-game-details) #PR - TODO Might need to comment this out when get-game-details is not previous operator
    -{(<s> ^descriptions {> <descs> <descs2>})}
 -->
    (<s> ^operator <o> +)

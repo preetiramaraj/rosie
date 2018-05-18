@@ -14,7 +14,8 @@ template color _HANDLE_ _WORD_* {
 #    blue1 blue 
     green green
     blue blue
-    purple1 purple
+    purple purple
+#    purple1 purple
     black1 black
     brown1 brown
     white1 white

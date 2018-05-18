@@ -31,7 +31,7 @@ sp {interpret-message*elaborate*interpret-what-do-you-see*elaborate-world-onto-s
               ^operator <o> +)
    (<o> ^name interpret-what-do-you-see
         ^message <msg>)
-   (<msg> ^arg2.current-location <cur-loc>)
+   (<msg> ^arg2.current-location <cur-loc>) # this is probably for mobile world #PR-TODO make separate elaborations for H-layout and tabletop
    (<world> ^predicates <preds>)
 -->
    (<o> ^predicates <preds>)

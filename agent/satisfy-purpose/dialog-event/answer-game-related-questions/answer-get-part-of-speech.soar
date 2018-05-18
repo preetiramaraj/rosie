@@ -190,7 +190,7 @@ sp {dialog-event*apply*get-part-of-speech-objDesc*retrieve-handle-LTI*noun
               ^PR-game-details)
    (<o> ^name get-part-of-speech-objDesc
         ^condition <cond>)
-   (<cond> ^name << row column section boat1 block object color value husband location count missionary1 cannibal1 bank1 number woman1 man1 husband last-name garbage >>  
+   (<cond> ^name << volume row column section boat1 block object color value husband location count missionary1 cannibal1 bank1 number woman1 man1 husband last-name garbage >>  
            ^args <args>)
 -->
    (<cond> ^structure-type N)

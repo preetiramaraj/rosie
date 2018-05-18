@@ -188,3 +188,85 @@ smem --add {
 			                  ^required true
 			                  ^syntactic-structure terminator)           
 }
+
+#
+
+smem --add {
+           (<involve> ^spelling |involve|
+                 ^structure-type INVOLVE)
+           
+ # Which actions involve the missionary
+(<sentence> ^construction |*-which-NPROP-involve-DP|  
+            ^current-word NPROP
+              ^prior-word |which|
+             ^prior-word-first true
+               ^assigners <isa>  <isb> <isc> <ise>
+             ^message-type which-action-involve
+             ^structure-type S)
+           (<isa> ^structure-type NPROP
+                    ^syntactic-structure complement2
+                  ^semantic-structure arg1
+                  ^referent-type literal
+                  ^optional true)
+           (<isb> ^structure-type INVOLVE
+                  ^after <isa>
+                  ^required true
+                  ^referent-type literal
+                  ^syntactic-structure nil)
+           (<isc> ^structure-type DP
+                  ^after <isb>
+                  ^syntactic-structure complement
+                  ^semantic-structure arg2
+                  ^referent-type literal
+                  ^required true)    
+           (<ise> ^structure-type QT
+                  ^after <isd>
+                  ^required true
+                  ^syntactic-structure terminator)
+ 
+
+}
+
+# What actions can you do with the red block? 
+smem --add {
+(<sentence> ^construction |*-what-NPROP-can-DP-do-PP|   
+            ^current-word NPROP
+              ^prior-word |what|
+             ^prior-word-first true
+               ^assigners <isa> <isb> <isc> <isd> <ise> <isf>
+             ^message-type what-actions-can-you-do
+             ^structure-type S)
+           (<isa> ^structure-type NPROP
+                    ^syntactic-structure complement2
+                  ^semantic-structure arg1
+                  ^referent-type literal
+                  ^optional true)
+           (<isb> ^structure-type V-AUX
+                  ^after <isa>
+                  ^required true
+                  ^referent-type literal
+                  ^syntactic-structure nil)
+           (<isc> ^structure-type DP
+                  ^after <isb>
+                  ^syntactic-structure complement
+                  ^semantic-structure agent
+                  ^referent-type literal
+                  ^required true)    
+           (<isd> ^structure-type DO
+                  ^after <isc>
+                  ^required true
+                  ^referent-type literal
+                  ^syntactic-structure nil)
+           (<ise> ^structure-type PP # with the block
+                  ^after <isd>
+                  ^syntactic-structure complement
+                  ^semantic-structure relation
+                  ^required true)
+           (<isf> ^structure-type QT
+                  ^after <ise>
+                  ^required true
+                  ^syntactic-structure terminator)
+           ## Should replace |see| with a verb and get the meaning from that. 
+
+           
+}
