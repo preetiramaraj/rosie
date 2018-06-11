@@ -40,7 +40,7 @@ sp {chunk*justification-1307*t2085-1
     (<r1> ^set <p2>)
     (<o1> ^object <n2>)
     -->
-    (interrupt)
+    #(interrupt)
     (<p2> ^instance <i1> +)
     (<i1> ^1 <n2> +)
 }
