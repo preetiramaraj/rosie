@@ -58,3 +58,12 @@ sp {top-state*elaborate*agent-params*perception
 #   (<params> ^vol-low-candidate-match .6)
 #   (<params> ^vol-high-candidate-match 1.4)
 }
+
+# Timer for updating world predicates every 100 decision cycles
+sp {top-state*elaborate*timer-update-world-predicates
+   (state <s> ^top-state <s>
+              ^agent-params <params>
+              ^io.input-link.time.steps <steps>)
+-->
+   (<params> ^update-world-predicates-timer (mod <steps> 100))
+}

@@ -44,3 +44,14 @@ sp {all*elaborate*agent-params
 -->
    (<s> ^agent-params <ap>)
 }
+
+# Update world predicates on the output-link
+sp {all*elaborate*output-link*world-predicate-relations
+   (state <s> ^agent-params.update-world-predicates-timer 0
+              ^top-state <ts>
+              ^io.output-link <ol>)
+   (<ts>  ^name rosie
+          ^world.predicates <preds>)
+-->
+    (<ol> ^predicates <preds>)
+}

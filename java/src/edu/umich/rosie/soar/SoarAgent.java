@@ -65,6 +65,7 @@ public class SoarAgent implements RunEventInterface, PrintEventInterface {
     private AgentConnector perceptionConn;
     private AgentConnector actuationConn;
     private AgentConnector languageConn;
+    private AgentConnector visualizationConn;
     
     private Time time;
 
@@ -149,6 +150,14 @@ public class SoarAgent implements RunEventInterface, PrintEventInterface {
         return languageConn;
     }
     
+    // Visualization
+    public void setVisualizationConnector(AgentConnector conn){
+        this.visualizationConn = conn;
+    }
+    public AgentConnector getVisualizationConnector(){
+        return visualizationConn;
+    }
+
     public void createAgent(){
         System.out.println("SoarAgent::createAgent()");
         // Initialize Soar Agent
@@ -199,8 +208,11 @@ public class SoarAgent implements RunEventInterface, PrintEventInterface {
         if(languageConn != null){
             languageConn.connect();
         }
+        if(visualizationConn != null){
+            visualizationConn.connect();
+        }
 
-        System.out.print("\n");
+	System.out.print("\n");
     }
 
     /**
@@ -255,6 +267,9 @@ public class SoarAgent implements RunEventInterface, PrintEventInterface {
         }
         if(languageConn != null){
             languageConn.disconnect();
+        }
+        if(visualizationConn != null){
+            visualizationConn.disconnect();
         }
 
         if(debuggerSpawned){
