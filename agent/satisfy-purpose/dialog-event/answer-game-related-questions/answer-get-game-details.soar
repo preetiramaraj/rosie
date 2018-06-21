@@ -19,7 +19,7 @@ sp {dialog-event*agent-game-action-description*propose*get-game-details
 ###################################################################
 # Apply operator get-game-details
 ###################################################################
-
+# PR - TODO Make these rules into separate files
 sp {states*apply*get-game-details*add-descriptions-to-state
    (state <s> ^operator <o>
         	  ^set <set>)
@@ -49,6 +49,7 @@ sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
 
 ## PR - conditions such as all locations are occupied
 # PR - the following rule might apply on the count part too and here as well (i.e. count of free clear blocks,latter being accounted for twice
+# PR - 05/30/18 The top one won't happen because here it expects two param-ids and count of free clear blocks won't have that
 sp {states*apply*get-game-details*get-single-object-description
    (state <s> ^operator <o>
               ^descriptions <descs>
@@ -198,8 +199,9 @@ sp {states*apply*get-game-details*retrieve-PP-and-individual-objects
                 ^param-id <param-id-2>
                 ^rtype <rtype2>)
 }
-
-sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-level-condition
+ 
+# This is for when the prepositional predicate with individual objects (both arguments have param-ids) are arguments of the original condition
+sp {states*apply*get-game-details*retrieve-PP-and-individual-objects*argument-level-condition 
    (state <s> ^PR-game-details
               ^descriptions <descs>
               ^operator <o>
@@ -514,6 +516,49 @@ sp {states*apply*get-game-details*retrieve-one-argument-predicates-for-verb
                 ^rtype <rtype>)
 }
 
+# To get object descriptions when they are not part of a verb or any other condition structure. for e.g. I do not see a small block, The goal is that there is a clear green location and there is a clear yellow location.
+# PR-TODO this will only work if object has param-id. in case of "I do not see a small block", it has no id so this won't work.
+sp {states*apply*get-game-details*retrieve-object-predicate-not-part-of-condition
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              -^verb-structure <verb-struct>
+              ^operator <o>
+              ^set <set>)
+   (<descs> ^handle <handle>)
+   (<o> ^name get-game-details)
+   (<set> ^handle <handle>
+          ^conditions <cond>)
+  -{(<set> ^conditions { <> <cond> <cond2> })
+     (<cond2> ^args <args>)
+     (<args> ^<< 1 2 >> <cond>)}
+   -{(<set> ^conditions.args.<< 1 2 3 >> <cond>)
+    (<descs> ^obj-desc.1.args.2 <cond>)}
+    (<cond> ^name <name>
+            ^args <args>
+            ^parameter <param>
+            ^negative <neg>)
+    (<args> ^1 <obj1>
+            -^2
+            -^3)
+    (<param> ^1 <first>)
+    (<first> ^param-id <param-id>
+             ^type <rtype>)    
+    (<obj1> ^name <name2>
+           ^parameter.num 0)
+-->
+   (<descs> ^description <desc>
+            ^obj-desc <obj-desc>)
+   (<desc> ^unsatisfied yes #if resolve-satisfaction-failure
+           ^1 <param-id>           
+           ^negative <neg>
+           ^type single-object-description
+           ^single-object-description single-object-description)           
+   (<obj-desc> ^no-condition yes
+               ^1 <cond>
+               ^param-id <param-id>
+                ^rtype <rtype>)
+}
+
 ######################################
 # Propose add generated attribute
 ######################################
@@ -525,7 +570,8 @@ sp {states*op-no-change*propose*add-generated-attribute
               ^impasse no-change)
    (<ss> ^name << dialog-event resolve-satisfaction-failure >>
          ^descriptions <descs>
-         ^operator.name get-game-details)
+        # ^operator.name get-game-details
+         )
    -{(<s> ^descriptions {> <descs> <descs2>})}
 -->
    (<s> ^operator <o> +)

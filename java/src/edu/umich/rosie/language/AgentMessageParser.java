@@ -1801,6 +1801,7 @@ public class AgentMessageParser
 		String type = SoarUtil.getValueOfAttribute(descId, "type");
 		// Type: set-description "All locations are covered"
 		// Type: number "The count of a is 3"
+		//Type: single-object-description "I do not see a free red block."
 		if (type != null)
 		{
 			return SoarUtil.getValueOfAttribute(descId, type)+ " ";
@@ -1853,8 +1854,24 @@ public class AgentMessageParser
 			
 			if(param2_string == null)
 			{
-				//description += article1 + objDesc1.get(0) + objDesc1.get(1) + prepPhrase + getTypeDescription(conditionId);
-				description += getConditionObjectDescription(object_descs, paramid1, true) + prepPhrase + getTypeDescription(conditionId);
+				String typeDescription = getTypeDescription(conditionId);
+				if (typeDescription.equals("single-object-description "))
+				{
+					String satisfied = SoarUtil.getValueOfAttribute(conditionId, "satisfied");
+					if(satisfied != null)
+					{
+						description += "I do not see " + getConditionObjectDescription(object_descs, paramid1, false);
+					}
+					else // PR-TODO just use the object description directly, use else condition to distinguish between param-id and non-param-id
+					{
+						description += "There is "+ getConditionObjectDescription(object_descs, paramid1, false);
+					}
+				}
+				else
+				{
+					//description += article1 + objDesc1.get(0) + objDesc1.get(1) + prepPhrase + getTypeDescription(conditionId);
+					description += getConditionObjectDescription(object_descs, paramid1, true) + prepPhrase + typeDescription ;
+				}
 				conditionVarWME = descSetId.FindByAttribute("description", ++k);
 				descriptionList.add(description);
 				continue;

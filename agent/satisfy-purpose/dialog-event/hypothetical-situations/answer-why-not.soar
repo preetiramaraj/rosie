@@ -46,11 +46,14 @@ sp {answer-can-you-see-game-concepts*apply*resolve-satisfaction-failure
          ^name answer-can-you-see-game-concepts)
    (<unresolved> -^<gtype>) # This is to differentiate it from bottom rule
 -->
+   #(interrupt)
    (<s> ^unresolved-conditions <unresolved>
         ^set <out-cond>
         ^purpose-type <type>
         ^concept-seen <seen>
-        ^gtype <gtype>)
+        ^gtype <gtype>
+        ^new-set <new-set>
+        ^PR-game-details yes)
    (<out-cond> ^handle resolve-concept)
 }
 
