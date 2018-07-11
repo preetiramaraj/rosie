@@ -55,3 +55,14 @@ sp {all*elaborate*output-link*world-predicate-relations
 -->
     (<ol> ^predicates <preds>)
 }
+
+# Update component learning progress in a task
+sp {all*elaborate*output-link*component-learning-progress
+   (state <s> ^agent-params.update-world-predicates-timer 2
+              ^top-state <ts>
+              ^io.output-link <ol>)
+   (<ts>  ^name rosie
+          ^learned-concepts <lns>)
+-->
+    (<ol> ^learned-concepts <lns>)
+}

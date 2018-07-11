@@ -323,9 +323,10 @@ sp {learn-goal-demonstration*send-message*game-final-state
     :o-support
    (state <s> ^name learn-goal-demonstration
               ^type initial
-              ^top-state.interaction.status <status>
-              ^top-state.dialog-context <dc>
-              ^top-state.interaction.changes <changes>)
+              ^top-state <ts>)
+   (<ts> ^interaction.status <status>
+         ^dialog-context <dc>
+         ^interaction.changes <changes>)
    (<dc> ^initial -^final ^needs-setup <t>)
 -->
     (<dc> ^needs-setup <t> -)
@@ -333,4 +334,5 @@ sp {learn-goal-demonstration*send-message*game-final-state
    (<msg> ^type define-actions
           ^complete-message true)
    (<status> ^performed.learning-event.type game)
+   (<ts> ^learned-concepts <concepts>) # This marks the beginning of task-learning, so adding this WME here
 }

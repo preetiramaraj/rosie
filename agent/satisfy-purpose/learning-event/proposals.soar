@@ -981,3 +981,18 @@ sp {learning-event*elaborate*learn-goal-definition*goal-predicate
 -->
    (<o> ^goal-predicate <pred>)
 }
+
+# Sending learned event to output link for visualization
+sp {learning-event*apply*send-learned-event-output
+   (state <s> ^name learning-event
+              ^finished-learning << action goal heuristic failure predicate >>
+              ^finished-learning <type>
+              ^<type> <typeid>
+              ^io.output-link <ol>
+              ^top-state.learned-concepts <lns>)
+   (<typeid> ^handle <name>)
+-->
+   (<lns> ^learned-concept <concept>)
+   (<concept> ^type <type>
+              ^name <name>)
+}
