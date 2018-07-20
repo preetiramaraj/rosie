@@ -166,7 +166,12 @@ smem --add {
           (<describe> ^spelling |describe|
                       ^referent @101017
                       ^super-type @60996)
-               
+
+    ## SHOW
+          (<show> ^spelling |show|
+                      ^referent @101019
+                      ^super-type @60996) 
+
     ## Point
           (<point> ^spelling |point|
                    ^referent @101002

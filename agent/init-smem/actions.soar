@@ -263,6 +263,12 @@ smem --add {
    (@describe1 ^handle describe1 ^item-type action)
 }
 
+### +@show [118]
+smem --add {
+   # Show 'clear' (on display screen)
+   (@show1 ^handle show1 ^item-type action)
+}
+
 #!#############################################################################################
 #!#############################################################################################
 #! Driving Actions

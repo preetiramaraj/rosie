@@ -1434,7 +1434,9 @@ public class AgentMessageParser
 				propertyDesc += "The size is " + val + ". ";
 			} else if(att.equals("color")) {
 				propertyDesc += "The color is " + val + ". ";
-			}			
+			} else if(att.equals("volume")) {
+				propertyDesc += "The volume is " + val + ". ";
+			}
 		}
 		
 		// This object is a location with no descriptive properties.

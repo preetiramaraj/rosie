@@ -253,7 +253,11 @@ smem --add {
           (<describe> ^spelling |describe|
                       ^referent @describe1
                       ^super-type @60996)                        
-                              
+ 
+    ## SHOW
+          (<show> ^spelling |show|
+                      ^referent @show1
+                      ^super-type @60996) 
 
     ## Attach
 #          (<attack> ^spelling |attack|
