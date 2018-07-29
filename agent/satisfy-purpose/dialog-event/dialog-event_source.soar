@@ -61,3 +61,6 @@ source answer-what-are-subtasks.soar
 
 # Source "answer-can-request.soar"
 source answer-can-request.soar
+
+# Source "answer-show-concepts.soar"
+source answer-show-concepts.soar

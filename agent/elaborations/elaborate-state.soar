@@ -66,3 +66,29 @@ sp {all*elaborate*output-link*component-learning-progress
 -->
     (<ol> ^learned-concepts <lns>)
 }
+
+# Writing this rule for when the concepts are pre-planned. Ideally they will
+# be pushed to output-link while doing a task or while learning a task that 
+# requires these predicates
+#sp {all*elaborate*output-link*update-show-learned-predicate-objects
+#   (state <s> ^agent-params.update-world-predicates-timer 100
+#              ^io.output-link <ol>)
+#   (<ts>  ^name rosie)
+#-->
+#   (<s> ^detect-predicate <pred>)
+#   (<pred> ^name clear ^copy-type deep)
+#}
+
+#sp {all*elaborate*output-link*output-show-learned-predicate-objects
+#   (state <s> ^agent-params.update-world-predicates-timer 4
+#              ^io.output-link <ol>
+#              ^detect-predicate <pred>)
+#   (<pred> ^name clear
+#           ^complete true
+#           ^results <results>)
+#   (<results> ^instance
+#   (<ts>  ^name rosie)
+#-->
+#   (<s>)
+#}
+

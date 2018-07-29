@@ -1,0 +1,60 @@
+###################################################################
+#
+# interpret-show-concepts
+# Occurs when the instructor wants the robot to show the concepts in its display
+# E.g. 'Show "clear"' will highlight all objects that satisfy the concept clear in its environment
+
+
+###################################################################
+
+
+######
+# OPERATOR PROPOSAL
+######
+sp {interpret-message*propose*interpret-show-concepts
+   (state <s> ^name interpret-message
+              ^instructor-message <msg>)
+   (<msg> ^action.handle show1
+         -^interpreted true)
+-->
+   (interrupt)
+   (<s> ^operator <o> +)
+   (<o> ^name interpret-show-concepts
+        ^message <msg>)
+}
+
+######
+# OPERATOR ELABORATIONS
+######
+# Elaborate useful information from the top-state onto the operator
+# Get game name from dialog or dialogue-context
+sp {interpret-message*elaborate*interpret-show-concepts
+   (state <s> ^name interpret-message
+              ^operator <o> +)
+   (<o> ^name interpret-show-concepts
+        ^message <msg>)   
+   (<msg> ^action.handle show1
+          ^arg1.sentence <concept-name>)
+-->
+   (<o> ^concept-name <concept-name>)
+}
+   
+sp {interpret-message*apply*interpret-show-concepts
+   (state <s> ^name interpret-message
+              ^operator <o>
+              ^instructor-message <msg>)
+   (<o> ^name interpret-show-concepts
+        ^concept-name <concept-name>)
+-->
+   (<s> ^new-segment-info <info>
+        ^mark-interpreted <msg>)
+   (<info> ^purpose <p>
+           ^originator instructor)
+   (<p> ^type show-concept-request
+        ^parameters <params>
+        ^satisfaction <sat>)
+   (<sat> ^dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+   (<params> ^concept-name <concept-name>)
+}

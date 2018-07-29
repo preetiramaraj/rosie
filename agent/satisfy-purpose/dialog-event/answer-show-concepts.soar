@@ -1,0 +1,76 @@
+sp {dialog-event*propose*answer-show-concepts
+   (state <s> ^name dialog-event
+              ^purpose <p>)
+   (<p> ^type show-concept-request
+        ^parameters <params>
+        ^satisfaction <sat>)   
+   (<params> ^concept-name <concept-name>
+             #^game <game-handle>
+             )
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name answer-show-concepts
+        ^concept-name <concept-name>
+        #^game tower-of-hanoi-31
+        )
+}
+
+sp {dialog-event*apply*answer-show-concepts
+   (state <s> ^name dialog-event
+              ^purpose <p>
+              ^operator <o>)
+   (<o> ^name answer-show-concepts
+        ^concept-name <concept-name>
+        #^game tower-of-hanoi-31
+        )
+-->
+   (<s> ^detect-predicate <pred>
+        ^display-predicate <pred-value>)
+   (<pred-value> ^name <concept-name>
+                 ^values <values>)
+   (<pred> ^name <concept-name> ^copy-type deep)
+}
+
+sp {dialog-event*apply*answer-show-concepts*collect-display-values
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^detect-predicate <pred>
+              ^display-predicate.values <display-values>)
+   (<pred> ^name <concept-name> 
+           ^complete true
+           ^results <results>)
+   (<results> ^instance.handle <handle>)
+   (<o> ^name answer-show-concepts
+        ^concept-name <concept-name>)
+-->
+   (<display-values> ^object <handle>)
+}
+
+sp {dialog-event*apply*answer-show-concepts*send-output
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^detect-predicate <pred> 
+              ^display-predicate <pred-value>
+              ^io.output-link <out>)
+   (<pred> ^name <concept-name> 
+           ^complete true
+           ^results <results>)
+   (<o> ^name answer-show-concepts
+        ^concept-name <concept-name>)
+-->
+   (<out> ^send-message <msg>
+          ^display-predicate <pred-value>)
+   (<msg> ^type ok)
+}
+
+sp {dialog-event*apply*answer-show-concepts*mark*performed
+   (state <s> ^name dialog-event
+              ^operator.name answer-show-concepts
+              ^io.output-link.send-message <msg>
+              ^top-state.interaction.status <status>)
+-->
+   (<status> ^performed.dialog-event <de>)
+   (<de> ^type explanation
+         ^originator agent)
+}
+   

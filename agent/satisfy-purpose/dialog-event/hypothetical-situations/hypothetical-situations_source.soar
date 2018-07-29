@@ -7,3 +7,6 @@ source can-you-see-game-concepts.soar
 
 # Source "answer-why-not.soar"
 source answer-why-not.soar
+
+# Source "detect-learned-predicates.soar"
+#source detect-learned-predicates.soar

@@ -114,6 +114,10 @@ source interpret-what-do-you-see.soar
 
 # Source file "interpret-can-request.soar" that interprets Can you do an action?
 source interpret-can-request.soar
+
+# Source file "interpret-show-concepts.soar" that interprets request to display concepts as visualization
+source interpret-show-concepts.soar
+
 source interpret-cancel.soar
 
 source interpret-interjection.soar
