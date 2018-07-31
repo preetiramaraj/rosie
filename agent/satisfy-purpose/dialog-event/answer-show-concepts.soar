@@ -39,7 +39,7 @@ sp {dialog-event*apply*answer-show-concepts*collect-display-values
    (<pred> ^name <concept-name> 
            ^complete true
            ^results <results>)
-   (<results> ^instance.handle <handle>)
+   (<results> ^instance.1.handle <handle>)
    (<o> ^name answer-show-concepts
         ^concept-name <concept-name>)
 -->
@@ -67,10 +67,12 @@ sp {dialog-event*apply*answer-show-concepts*mark*performed
    (state <s> ^name dialog-event
               ^operator.name answer-show-concepts
               ^io.output-link.send-message <msg>
+              ^io.output-link.display-predicate <pred-value>
               ^top-state.interaction.status <status>)
 -->
    (<status> ^performed.dialog-event <de>)
    (<de> ^type explanation
          ^originator agent)
+   (<pred-value> ^status complete) #PR - hack to remove from output-link after posting
 }
    
