@@ -1,0 +1,103 @@
+sp {learn-predicate*elaborate*inherited*location*relations
+   (state <s> ^name learn-predicate
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates.category location)
+   (<prep2> -^handle on1 ^instance <instance2> -^dont-copy <instance2>)
+   (<instance2> ^{<< 1 2 >> <arg1>} <obja> ^{<< 1 2 >> <arg2>} {<objx> <> <obj>} -^3 ^{<arg1> <> <arg2>})
+   -->
+   (<prep2> ^instance <instance4> ^dont-copy <instance4>) #dont copy
+   (<instance4> ^<arg1> <obj> ^<arg2> <objx>)
+}
+
+sp {learn-predicate*elaborate*inherited*location*relations*2
+   (state <s> ^name learn-predicate
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates.category location)
+   (<prep2> -^handle on1 ^instance <instance2> ^dont-copy <instance2>)
+   (<instance2> ^1 <obja> ^2 {<objx> <> <obj>} -^3)
+   -->
+   (<prep2> ^instance <instance4> ^dont-copy <instance4>) #dont copy
+   (<instance4> ^1 <obj> ^2 <objx>)
+}
+#inherit x y row column position
+sp {learn-predicate*elaborate*inherited*location*xy*coordinate
+   (state <s> ^name learn-predicate
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates <preds>)
+   (<preds> ^{<< x y row column position >> <xy>} <cord> )#^category location
+   (<obj> ^predicates <op>)
+   -->
+   (<op> ^<xy> <cord> ^dont-copy <xy> ^dont-copy dont-copy)
+}
+
+sp {learn-predicate*elaborate*from*transfer-action-goal
+   (state <s> ^name learn-predicate
+              ^top-state.dialog-context.name <name>
+              ^superstate <ss>)
+   (<ss> ^name transfer-action-goal ^structure <t> ^gtype <type>)
+-->
+   (<s> ^gtype <type>
+      #  ^retrieve-handle <handle>
+        #^parsed-structure <ps>
+        ^game <name>
+        ^<type> <t>
+        ^main-type <type>)
+}
+
+
+sp {game-search*elaborate*inherited*location*relations
+   (state <s> ^name game-search
+             # ^deep-copy-world.copy-objects-map <com>
+              ^simulated true
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates.category location)
+   (<prep2> -^handle on1 ^instance <instance2> -^dont-copy <instance2>)
+   (<instance2> ^{<< 1 2 >> <arg1>} <obja> ^{<< 1 2 >> <arg2>} {<objx> <> <obj>} -^3 ^{<arg1> <> <arg2>})
+   -->
+   (<prep2> ^instance <instance4> ^dont-copy <instance4>) #dont copy
+   (<instance4> ^<arg1> <obj> ^<arg2> <objx>)
+}
+
+sp {game-search*elaborate*inherited*location*relations*2
+   (state <s> ^name game-search
+             # ^deep-copy-world.copy-objects-map <com>
+              ^simulated true
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates.category location)
+   (<prep2> -^handle on1 ^instance <instance2> ^dont-copy <instance2>)
+   (<instance2> ^1 <obja> ^2 {<objx> <> <obj>} -^3)
+   -->
+   (<prep2> ^instance <instance4> ^dont-copy <instance4>) #dont copy
+   (<instance4> ^1 <obj> ^2 <objx>)
+}
+
+#inherit x y row column
+#how not to copy (no longer valid if moved)
+sp {game-search*elaborate*inherited*location*xy*coordinate
+   (state <s> ^name game-search
+              ^simulated true
+              ^world.predicates <p2>)
+   (<p2> ^predicate <prep> ^predicate <prep2>)
+   (<prep> ^handle on1 ^instance <instance>)
+   (<instance> ^1 <obj> ^2 <obja>)
+   (<obja> ^predicates <preds>)
+   (<preds> ^{<< x y row column position >> <xy>} <cord> ) #^category location
+   (<obj> ^predicates <op>)
+   -->
+   (<op> ^<xy> <cord> ^dont-copy <xy> ^dont-copy dont-copy)
+}
