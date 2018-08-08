@@ -834,16 +834,7 @@ public class AgentMessageParser
 				//PR - TODO: make this into a function that can be used across multiple functions
 				// Retrieving multiple objects that are related to object 2 through prep
 				int k = 0;
-				List<String> param1_list = new ArrayList<String>();
-				WMElement param1_WME = descId.FindByAttribute("1", k);
-				while (param1_WME != null)
-				{
-					Identifier param1Id = param1_WME.ConvertToIdentifier();
-					String objDesc1 = generateObjectDescription(param1Id);
-                    String article = startsWithVowel(objDesc1) ? "an ":"a ";
-					param1_list.add(article + objDesc1);
-					param1_WME = descId.FindByAttribute("1", ++k);
-				}
+				List<String> param1_list = generateMultipleObjectDescriptions(descId, "1");
 				
 				//PR - TODO: make this into a helper function that can be used across multiple functions
 				if (param1_list.size() > 1)
@@ -863,6 +854,20 @@ public class AgentMessageParser
 				descWME = descSetId.FindByAttribute("description", ++i);
 			}
 			
+			List<String> obj_list = generateMultipleObjectDescriptions(descSetId, "obj");
+			if (obj_list.size() > 1)
+			{
+				String obj1Desc = String.join(", ", obj_list);
+				int lastcomma = obj1Desc.lastIndexOf(',');
+				obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1,lastcomma) + " and" + obj1Desc.substring(lastcomma+1);
+				description += "I see " + obj1Desc.toLowerCase() + ".";
+			}
+			else
+			{
+                String obj1Desc = obj_list.get(0);
+                obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1);
+                description += "I see " + obj1Desc.toLowerCase() + ".";
+			}
 		}
 		else {
 			description =  "Cannot describe what I see";
@@ -1448,6 +1453,23 @@ public class AgentMessageParser
 		return propertyDesc;
 	}
 	
+	public static List<String> generateMultipleObjectDescriptions(Identifier descId, String param)
+	{
+		int k = 0;
+		List<String> param1_list = new ArrayList<String>();
+		WMElement param1_WME = descId.FindByAttribute(param, k);
+		while (param1_WME != null)
+		{
+			Identifier param1Id = param1_WME.ConvertToIdentifier();
+			String objDesc1 = generateObjectDescription(param1Id);
+            String article = startsWithVowel(objDesc1) ? "an ":"a ";
+			param1_list.add(article + objDesc1);
+			param1_WME = descId.FindByAttribute(param, ++k);
+		}
+
+		return param1_list;
+	}
+
 	public static String generateObjectDescription(Identifier descId){
 		// PR - TODO consider adding article in here.
 		String root = "object"; // PR - Commenting because now category seems to be correct. Verify after merge

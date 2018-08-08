@@ -32,9 +32,11 @@ sp {interpret-message*elaborate*interpret-what-do-you-see*elaborate-world-onto-s
    (<o> ^name interpret-what-do-you-see
         ^message <msg>)
    (<msg> -^arg2.current-location <cur-loc>)
-   (<world> ^predicates <preds>)
+   (<world> ^predicates <preds>
+            ^objects <objs>)
 -->
-   (<o> ^predicates <preds>)
+   (<o> ^predicates <preds>
+        ^objects <objs>)
 }
 
 sp {interpret-message*elaborate*interpret-what-do-you-see*elaborate-world-onto-state*mobile-domain
@@ -44,7 +46,7 @@ sp {interpret-message*elaborate*interpret-what-do-you-see*elaborate-world-onto-s
    (<o> ^name interpret-what-do-you-see
         ^message <msg>)
    (<msg> ^arg2.current-location <cur-loc>)
-   (<world> ^predicates <preds>)
+   (<world> ^predicates <preds>) # add objects if it exists
 -->
    (<o> ^predicates <preds>)
 }
@@ -52,13 +54,15 @@ sp {interpret-message*elaborate*interpret-what-do-you-see*elaborate-world-onto-s
 ######
 # OPERATOR APPLICATION
 ######
+# The following rule may not work for H-layout
 sp {interpret-message*elaborate*interpret-what-do-you-see*create*message
    (state <s> ^name interpret-message
               ^instructor-message <msg>
               ^operator <o>)
    (<o> ^name interpret-what-do-you-see
         ^message <msg>
-        ^predicates <preds>)
+        ^predicates <preds>
+        ^objects <objs>)
 -->
    (<s> ^new-segment-info <info>
         ^mark-interpreted <msg>)
@@ -67,9 +71,9 @@ sp {interpret-message*elaborate*interpret-what-do-you-see*create*message
    (<p> ^type agent-perception-description
         ^parameters <params>
         ^satisfaction <sat>)
-   (<params> ^predicates <preds>)
+   (<params> ^predicates <preds>
+             ^objects <objs>)
    (<sat> ^dialog-event <de>)
    (<de> ^type explanation
          ^originator agent)
 }
-  

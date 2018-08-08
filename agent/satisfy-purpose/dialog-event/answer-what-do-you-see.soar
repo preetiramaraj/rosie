@@ -7,11 +7,13 @@ sp {dialog-event*propose*answer-what-do-you-see
    (<p> ^type agent-perception-description
         ^parameters <params>
         ^satisfaction <sat>)   
-   (<params> ^predicates <preds>)
+   (<params> ^predicates <preds>
+             ^objects <objs>) # May not work with H-layout
 -->
    (<s> ^operator <o> +)
    (<o> ^name answer-what-do-you-see
-        ^predicates <preds>)
+        ^predicates <preds>
+        ^objects <objs>)
 }
 
 sp {dialog-event*apply*answer-what-do-you-see*add-descriptions-to-state
@@ -38,7 +40,22 @@ sp {dialog-event*apply*answer-what-do-you-see*retrieve-PP-predicate
            ^1 <obj1>
            ^2 <obj2>)
 }
-   
+
+sp {dialog-event*apply*answer-what-do-you-see*retrieve-objects-not-part-of-predicates
+   (state <s> ^name dialog-event
+              ^descriptions <descs>
+              ^operator <o>)
+   (<o> ^name answer-what-do-you-see
+        ^predicates <preds>
+        ^objects <objs>)
+   (<objs> ^object <obj1>)
+   -{(<preds> ^predicate <pred>)
+     (<pred> ^instance <inst>)
+     (<inst> ^<< 1 2 >> <obj1>)}
+-->
+   (<descs> ^obj <obj1>)
+}
+
 ########################################################
 # Report answer using complete-answer-what-do-you-see
 ########################################################   
