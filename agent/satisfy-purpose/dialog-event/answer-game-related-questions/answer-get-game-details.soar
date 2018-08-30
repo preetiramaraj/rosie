@@ -20,7 +20,7 @@ sp {dialog-event*agent-game-action-description*propose*get-game-details
 # Apply operator get-game-details
 ###################################################################
 # PR - TODO Make these rules into separate files
-sp {states*apply*get-game-details*add-descriptions-to-state
+sp {states*apply*get-game-details*add-descriptions-to-state*with-handle
    (state <s> ^operator <o>
         	  ^set <set>)
    (<set> ^handle <handle>)
@@ -31,6 +31,20 @@ sp {states*apply*get-game-details*add-descriptions-to-state
    (<s> ^descriptions <descs>
         ^PR-game-details <val>)
    (<descs> ^handle <handle>)
+}
+
+sp {states*apply*get-game-details*add-descriptions-to-state
+   (state <s> ^operator <o>
+              ^set <set>)
+   (<set> -^handle <handle>)
+   (<o> ^name get-game-details
+        #^descriptions <descs>
+        ^PR-game-details <val>)
+-->              
+   (<s> ^descriptions <descs>
+        ^PR-game-details <val>)
+   (<descs> ^handle dummy-handle)
+   (<set> ^handle dummy-handle)
 }
 
 sp {dialog-event*apply*get-game-details*add-concept-name-to-descriptions
@@ -300,7 +314,8 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*attribu
 
 # Works for greater than 1 (in risk) where 1 does not have a param-id of its own
 sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-value-second-argument
-   (state <s> ^PR-game-details
+   (state <s> -^name resolve-satisfaction-failure
+              ^PR-game-details
               ^descriptions <descs>
               ^operator <o>
               ^set <set>)
@@ -321,6 +336,57 @@ sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-val
            ^2 id2 -
            ^number <res-val>)
 }
+
+sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-value-second-argument*when-error
+   (state <s> ^PR-game-details
+              ^descriptions <descs>
+              ^operator <o>
+              ^set <set>)
+   (<set> ^handle dummy-handle)
+   (<descs> ^description <desc>
+            ^obj-desc <obj-desc1>)
+   (<desc> ^1 <param-id>
+           ^2 id2
+           ^negative <neg>
+           ^id2 <obj2>)   
+   (<obj-desc1> ^1 <cond>
+                ^param-id <param-id>)
+   (<cond> ^return-type number
+           ^result <res>)
+   (<res> ^set <res-set>)
+   (<res-set> ^instance { <inst> > <inst2> })
+   (<inst> ^1 <res-val>)
+-->
+   (<desc> ^type number
+           ^id2 <obj2> -
+           ^2 id2 -
+           ^number <res-val>)
+}
+
+#PR - remobe if works
+#sp {states*apply*get-game-details*retrieve-conditions-that-are-arguments*get-value-second-argument
+#   (state <s> ^name resolve-satisfaction-failure
+#              ^PR-game-details
+#              ^descriptions <descs>
+#              ^operator <o>
+#              ^set <set>)
+#   (<descs> ^description <desc>)
+#   (<desc> ^1 <param-id>
+#           ^2 id2
+#           ^negative <neg>
+#           ^id2 <obj2>)
+#   (<obj2> ^name number
+#            ^return-type number
+#            ^result <res>)
+#   (<res> ^set <res-set>)
+#   (<res-set> ^instance <inst>)
+#   (<inst> ^1 <res-val>)
+#-->
+#   (<desc> ^type number
+#           ^id2 <obj2> -
+#           ^2 id2 -
+#           ^number <res-val>)
+#}
            
 # The following rule handles predicates with the same param-id for a given condition for e.g. Color of object A is color of object B, here both colors will have the same param-id
 # both predicates would have return-type number # PR - TODO a good way to label this would be param-idA and param-idB to distinguish both sides and store them.

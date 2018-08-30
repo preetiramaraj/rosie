@@ -243,7 +243,10 @@ sp {learn-condition*apply*resolve-satisfaction-failure
           ^operator.name resolve-satisfaction-failure)
 -->
    (<s> ^unresolved-conditions <cos>
-        ^set <out-cond>)
+        ^set <out-cond>
+        ^new-set <new-set>
+        ^PR-game-details yes)
+   (<out-cond> ^handle dummy-handle)
 }
 
 sp {resolve-satisfaction-failure*elaborate*unresolved
@@ -349,7 +352,7 @@ sp {resolve-conditions*elaborate*resolve-satisfaction-failure*select-nlp
    (<condition> #PR - TODO consider doing this with parameter instead of args
                 ^args <args1>
                 ^arg-count <argcount>)
-   -{(<nlp-set> ^nlp { <condition2> <> <condition1> })
+   -{(<nlp-set> ^nlp { <condition2> <> <condition> })
      (<condition2> ^arg-count { > <argcount> <argcount2> })}
 -->
     (<o> ^nlp <condition>
@@ -369,7 +372,7 @@ sp {dialog-event*elaborate*resolve-satisfaction-failure*select-nlp
    (<condition> #PR - TODO consider doing this with parameter instead of args
                 ^args <args1>
                 ^arg-count <argcount>)
-   -{(<nlp-set> ^nlp { <condition2> <> <condition1> })
+   -{(<nlp-set> ^conditions { <condition2> <> <condition> })
      (<condition2> ^arg-count { > <argcount> <argcount2> })}
 -->
     (<o> ^nlp <condition>
@@ -395,8 +398,27 @@ sp {resolve-conditions*apply*resolve-satisfaction-failure*neg-pair
    (<negpair> ^<paramid1> { <num1> <> <num> } #num1 is what it should have been #PR - confirm with james
               ^<paramid2> <cset>)
 -->
-   (<s> ^set <set>)
+   (<s> ^set <set>        
+        ^PR-game-details yes
+        ^new-set <new-set>)
    (<set> ^conditions <cond>)
+}
+
+sp {resolve-conditions*apply*resolve-satisfaction-failure*add-number-condition
+   (state <s> ^name resolve-satisfaction-failure
+              ^set <set>        
+              ^PR-game-details yes
+              ^superstate <ss>
+              ^superstate.superstate <sss>)
+   (<ss> ^operator <o>)
+   (<sss> ^<gtype>.condition {<> <cond> <condition2>}
+         ^gtype { <> |predicate| <gtype> })
+   (<o> ^name resolve-satisfaction-failure
+        ^nlp <cond>
+        ^gtype <gtype>)
+   (<condition2> ^arg-count 0)
+-->
+   (<set> ^conditions <condition2>)
 }
 # PR - end my  version
 
