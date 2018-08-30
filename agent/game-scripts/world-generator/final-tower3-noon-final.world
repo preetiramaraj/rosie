@@ -1,0 +1,32 @@
+objid 1
+category location
+color green1
+volume 4.0 
+
+objid 2
+category location
+color green1
+volume 4.0 
+
+objid 3
+category location
+color blue1
+volume 4.0 
+
+objid 4
+size medium1
+category block
+volume 2.0 
+
+objid 5
+size large1
+category block
+volume 3.0 
+
+predicate on1
+5 2
+6 3
+
+predicate below1
+2 5
+3 6

@@ -1,89 +1,52 @@
 objid 1
 category location
-color red1
 
 objid 2
 category location
-color orange1
 
 objid 3
 category location
+color blue1
 
 objid 4
 category location
-color yellow1
 
 objid 5
 category location
-color green1
 
 objid 6
 category location
-color blue1
 
 objid 7
 category location
-color purple1
 
 objid 8
 category location
-color gray1
 
 objid 9
 category location
-color brown1
 
 objid 10
 category block
-color red1
+color black1
 
 objid 11
 category block
-color orange1
+color black1
 
 objid 12
 category block
-color yellow1
-
-objid 13
-category block
-color green1
-
-objid 14
-category block
 color blue1
 
-objid 15
-category block
-color purple1
-
-objid 16
-category block
-color gray1
-
-objid 17
-category block
-color brown1
-
 predicate on1
-10 2
-11 3
+10 4
+11 2
 12 1
-13 4
-14 6
-15 7
-16 8
-17 9
 
 predicate below1
-2 10
-3 11
+4 10
+2 11
 1 12
-4 13
-6 14
-7 15
-8 16
-9 17
 
 predicate near1
 1 2
@@ -126,6 +89,13 @@ predicate near1
 9 8
 9 5
 9 6
+3 10
+3 11
+6 10
+6 11
+6 12
+9 11
+9 12
 
 predicate diagonal-with1
 1 5
