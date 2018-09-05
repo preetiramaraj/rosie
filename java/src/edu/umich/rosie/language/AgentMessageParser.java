@@ -855,18 +855,21 @@ public class AgentMessageParser
 			}
 			
 			List<String> obj_list = generateMultipleObjectDescriptions(descSetId, "obj");
-			if (obj_list.size() > 1)
+			if (obj_list.size() != 0)
 			{
-				String obj1Desc = String.join(", ", obj_list);
-				int lastcomma = obj1Desc.lastIndexOf(',');
-				obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1,lastcomma) + " and" + obj1Desc.substring(lastcomma+1);
-				description += "I see " + obj1Desc.toLowerCase() + ".";
-			}
-			else
-			{
-                String obj1Desc = obj_list.get(0);
-                obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1);
-                description += "I see " + obj1Desc.toLowerCase() + ".";
+				if (obj_list.size() > 1)
+				{
+					String obj1Desc = String.join(", ", obj_list);
+					int lastcomma = obj1Desc.lastIndexOf(',');
+					obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1,lastcomma) + " and" + obj1Desc.substring(lastcomma+1);
+					description += "I see " + obj1Desc.toLowerCase() + ".";
+				}
+				else
+				{
+	                String obj1Desc = obj_list.get(0);
+	                obj1Desc = obj1Desc.substring(0,1).toUpperCase() + obj1Desc.substring(1);
+	                description += "I see " + obj1Desc.toLowerCase() + ".";
+				}
 			}
 		}
 		else {
@@ -1466,7 +1469,7 @@ public class AgentMessageParser
 			param1_list.add(article + objDesc1);
 			param1_WME = descId.FindByAttribute(param, ++k);
 		}
-
+		
 		return param1_list;
 	}
 
