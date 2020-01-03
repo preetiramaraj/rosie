@@ -28,7 +28,8 @@ sp {dialog-event*apply*answer-show-concepts
         ^display-predicate <pred-value>)
    (<pred-value> ^name <concept-name>
                  ^values <values>)
-   (<pred> ^name <concept-name> ^copy-type deep)
+   (<pred> ^name <concept-name> ^copy-type deep #^type binary
+           )
 }
 
 sp {dialog-event*apply*answer-show-concepts*collect-display-values
@@ -39,11 +40,15 @@ sp {dialog-event*apply*answer-show-concepts*collect-display-values
    (<pred> ^name <concept-name> 
            ^complete true
            ^results <results>)
-   (<results> ^instance.1.handle <handle>)
+   (<results> ^instance <instance>)
+   (<instance> ^1.handle <handle>
+               #^2.handle <handle2>
+               )
    (<o> ^name answer-show-concepts
         ^concept-name <concept-name>)
 -->
    (<display-values> ^object <handle>)
+   (write (crlf) (cmd print --depth 2 <handle>))
 }
 
 sp {dialog-event*apply*answer-show-concepts*send-output

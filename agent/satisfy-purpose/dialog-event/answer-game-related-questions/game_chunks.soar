@@ -3295,7 +3295,7 @@ sp {chunk-multi*chunk-predicate-impasse*apply*complete*snc*t11898-1
     (<r2> ^set <r3> +)
     (<p8> ^1 <p7> + ^num 1 +)
     (<p7> ^type single + ^param-id 1 +)
-    (<c3> ^type attribute + ^name red1 + ^attribute color + ^result <r4> +
+    (<c3> ^type attribute + ^name red + ^attribute color + ^result <r4> +
            ^parameter <p10> + ^negative false + ^args <a5> + ^rtype single +)
     (<r4> ^set <p9> +)
     (<p10> ^num 0 +)

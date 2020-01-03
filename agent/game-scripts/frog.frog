@@ -1,7 +1,7 @@
 the name of the puzzle is frogs-and-toads.
 load init-frog.
 ok.
-you can move a blue block that is on a location onto an available location that is to the right of the location.
+you can move a brown block that is on a location onto an available location that is to the right of the location.
 if a location is not below an object then it is available.
 you can move a red block that is on a location onto an available location that is to the left of the location.
 load second-frog.

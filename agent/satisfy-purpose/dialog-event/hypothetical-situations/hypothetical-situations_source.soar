@@ -10,3 +10,6 @@ source answer-why-not.soar
 
 # Source "detect-learned-predicates.soar"
 #source detect-learned-predicates.soar
+
+# Source "detect-learned-predicates-binary" so that you can detect both unary and binary predicates
+#source detect-learned-predicates-binary.soar
